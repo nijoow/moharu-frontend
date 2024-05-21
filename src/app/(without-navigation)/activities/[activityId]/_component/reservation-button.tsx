@@ -15,7 +15,7 @@ const ReservationButton: React.FC<ReservationButtonProps> = ({
   return (
     <Button
       onClick={() => router.push(`/activities/${activityId}/reservation`)}
-      className="mt-auto w-full"
+      className="sticky bottom-0 left-0 mt-auto w-full"
     >
       예약하기
     </Button>

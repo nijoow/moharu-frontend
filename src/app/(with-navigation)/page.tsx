@@ -2,27 +2,9 @@
 
 import MainActivityCard from '@/app/_components/activity/main-activity-card';
 import CategoryBar from '@/app/_components/category-bar/category-bar';
+import { Activity, Category } from '@/types/type';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
-
-export interface Category {
-  categoryId: string;
-  name: string;
-  description: string;
-  icon: string;
-}
-
-export interface Activity {
-  activityId: string;
-  title: string;
-  description: string;
-  categoryId: string;
-  imageUrl: string;
-  activityType: string;
-  location: string;
-  tags: string[];
-  activityDate: string;
-  registerDate: string;
-}
 
 export default function Home() {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
@@ -45,6 +27,20 @@ export default function Home() {
 
   return (
     <main>
+      {/* TODO: 날짜 선택 컴포넌트 */}
+      {/* TODO: 날짜 포맷을 위한 moment 사용 여부 */}
+      <div className="px-24px pb-12px pt-24px">
+        <div className="flex cursor-pointer rounded-full border-[1px] border-[#E2E8F0] px-[20px] py-[18px]">
+          <Image
+            src="/images/icons/calendar-days.svg"
+            alt="위치"
+            width={24}
+            height={24}
+            className="mr-[14px]"
+          />
+          <span>5월 20일 (월)</span>
+        </div>
+      </div>
       {/* TODO: 카테고리 바 sticky 처리 여부 */}
       <CategoryBar categoryList={categoryList} />
       {activities.map(activity => (

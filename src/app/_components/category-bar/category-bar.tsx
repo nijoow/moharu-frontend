@@ -1,4 +1,4 @@
-import { Category } from '@/app/(with-navigation)/page';
+import { Category } from '@/types/type';
 import Image from 'next/image';
 
 interface CategoryBarProps {
@@ -9,12 +9,12 @@ const CategoryBar: React.FC<CategoryBarProps> = ({ categoryList }) => {
   return (
     <div className="scroll-x flex justify-between p-5">
       {categoryList.map(category => (
-        <div key={category.categoryId}>
+        <div key={category.categoryId} className="cursor-pointer">
           <Image
             src={`/images/icons/${category.icon}.svg`}
             alt={category.name}
-            width={24}
-            height={24}
+            width={20}
+            height={20}
           />
           <p>{category.name}</p>
         </div>

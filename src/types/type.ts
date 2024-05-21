@@ -8,7 +8,15 @@ export interface Activity {
   location: string;
   tags: string[];
   activityDate: string;
+  activityEndDate: string;
   registerDate: string;
+}
+
+export interface Category {
+  categoryId: string;
+  name: string;
+  description: string;
+  icon: string;
 }
 
 export interface User {
