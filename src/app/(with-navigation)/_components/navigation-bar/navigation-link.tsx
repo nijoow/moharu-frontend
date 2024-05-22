@@ -17,7 +17,7 @@ const NavigationLink = ({
     className="col-span-1 flex h-full flex-col items-center justify-center"
   >
     <Icon
-      className={cn(` h-6 w-6`, {
+      className={cn(` mb-4px h-6 w-6`, {
         'stroke-pink-500': active,
         'stroke-black': !active,
       })}

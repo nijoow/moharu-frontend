@@ -1,5 +1,7 @@
-import LocationInfo from '@/app/_components/info/location-info';
-import ScheduleInfo from '@/app/_components/info/schedule-info';
+import ActiveLocationInfo from '@/app/_components/activity/activity-location-info';
+import ActiveScheduleInfo from '@/app/_components/activity/activity-schedule-info';
+import ActivityTypeBadge from '@/app/_components/activity/activity-type-badge';
+import { getActivityType } from '@/lib/utils';
 import { Activity } from '@/types/type';
 import ReservationButton from './_component/reservation-button';
 
@@ -10,7 +12,7 @@ const activities = [
     description: 'Activity 1 Description',
     categoryId: '1',
     imageUrl: 'https://img.vogue.co.kr/vogue/2021/04/style_608bc2c4e9442.jpg',
-    activityType: 'Type 1',
+    type: 'event',
     address: 'Addressssss',
     location: 'Location 1',
     tags: ['tag1', 'tag2'],
@@ -25,7 +27,7 @@ const activities = [
     description: 'Activity 2 Description',
     categoryId: '2',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
-    activityType: 'Type 2',
+    type: 'event',
     address: 'Addressssss',
     location: 'Location 2',
     tags: ['tag3', 'tag4'],
@@ -40,7 +42,7 @@ const activities = [
     description: 'Activity 3 Description',
     categoryId: '3',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
-    activityType: 'Type 3',
+    type: 'event',
     address: 'Addressssss',
     location: 'Location 3',
     tags: ['tag5', 'tag6'],
@@ -55,7 +57,7 @@ const activities = [
     description: 'Activity 4 Description',
     categoryId: '4',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
-    activityType: 'Type 4',
+    type: 'event',
     address: 'Addressssss',
     location: 'Location 4',
     tags: ['tag7', 'tag8'],
@@ -70,7 +72,7 @@ const activities = [
     description: 'Activity 5 Description',
     categoryId: '5',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
-    activityType: 'Type 5',
+    type: 'event',
     address: 'Addressssss',
     location: 'Location 5',
     tags: ['tag9', 'tag10'],
@@ -85,7 +87,7 @@ const activities = [
     description: 'Activity 6 Description',
     categoryId: '6',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
-    activityType: 'Type 6',
+    type: 'event',
     address: 'Addressssss',
     location: 'Location 6',
     tags: ['tag11', 'tag12'],
@@ -100,7 +102,7 @@ const activities = [
     description: 'Activity 7 Description',
     categoryId: '7',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
-    activityType: 'Type 7',
+    type: 'event',
     address: 'Addressssss',
     location: 'Location 7',
     tags: ['tag13', 'tag14'],
@@ -115,7 +117,7 @@ const activities = [
     description: 'Activity 8 Description',
     categoryId: '8',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
-    activityType: 'Type 8',
+    type: 'event',
     address: 'Addressssss',
     location: 'Location 8',
     tags: ['tag15', 'tag16'],
@@ -130,7 +132,7 @@ const activities = [
     description: 'Activity 9 Description',
     categoryId: '9',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
-    activityType: 'Type 9',
+    type: 'event',
     address: 'Addressssss',
     location: 'Location 9',
     tags: ['tag17', 'tag18'],
@@ -145,7 +147,7 @@ const activities = [
     description: 'Activity 10 Description',
     categoryId: '10',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
-    activityType: 'Type 10',
+    type: 'event',
     address: 'Addressssss',
     location: 'Location 10',
     tags: ['tag19', 'tag20'],
@@ -190,6 +192,8 @@ export default async function ActivityPage({
   console.log(activity);
   if (!activity) return null;
 
+  const activityType = getActivityType(activity.type);
+
   return (
     <>
       {/* TODO:overlay header 필요 */}
@@ -203,19 +207,14 @@ export default async function ActivityPage({
 
       <div className="px-24px py-20px">
         <div className="flex-col border-b  pb-24px">
-          {/* TODO: design system tab_button 컴포넌트로 대체 */}
-          <div className="mb-8px flex inline-flex bg-orange-500 px-12px text-white">
-            전시
-          </div>
-
+          <ActivityTypeBadge type={activityType} />
           <h4 className="mb-8px text-20px font-bold">{activity.title}</h4>
-
-          <LocationInfo
+          <ActiveLocationInfo
             location={activity.location}
             address={activity.address}
           />
           <div className="h-8px"></div>
-          <ScheduleInfo activity={activity} />
+          <ActiveScheduleInfo activity={activity} />
         </div>
         <div className="py-24px">
           {detailInfo.map((info, index) => (
