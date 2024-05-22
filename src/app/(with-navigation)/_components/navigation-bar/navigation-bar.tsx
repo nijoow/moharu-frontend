@@ -1,30 +1,48 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
 import MobileNavigationLink from './navigation-link';
+import HeartIcon from '/public/images/icons/heart.svg';
+import HomeIcon from '/public/images/icons/home.svg';
+import UserIcon from '/public/images/icons/user.svg';
 
-const mobileNavigationList = [
-  {
-    href: '/',
-    icon: 'home',
-    text: '홈',
-  },
-  {
-    href: '/wish-list',
-    icon: 'heart',
-    text: '좋아요',
-  },
-  {
-    href: '/my-page',
-    icon: 'user',
-    text: '프로필',
-  },
-];
+const NavigationBar = () => {
+  const pathname = usePathname();
 
-// TODO: selectedMenu 처리 필요 pink/600
-const NavigationBar = () => (
-  <nav className="sticky bottom-0 left-0 grid h-16 w-full flex-none grid-cols-3">
-    {mobileNavigationList.map(({ href, icon, text }) => (
-      <MobileNavigationLink key={text} href={href} icon={icon} text={text} />
-    ))}
-  </nav>
-);
+  const mobileNavigationList = [
+    {
+      href: '/',
+      Icon: HomeIcon,
+      text: '홈',
+      active: pathname === '/',
+    },
+    {
+      href: '/wish-list',
+      Icon: HeartIcon,
+      text: '좋아요',
+      active: pathname.includes('/wish-list'),
+    },
+    {
+      href: '/my-page',
+      Icon: UserIcon,
+      text: '프로필',
+      active: pathname.includes('/my-page'),
+    },
+  ];
+
+  return (
+    <nav className="sticky bottom-0 left-0 grid h-16 w-full flex-none grid-cols-3">
+      {mobileNavigationList.map(({ href, Icon, text, active }) => (
+        <MobileNavigationLink
+          key={text}
+          href={href}
+          Icon={Icon}
+          text={text}
+          active={active}
+        />
+      ))}
+    </nav>
+  );
+};
 
 export default NavigationBar;

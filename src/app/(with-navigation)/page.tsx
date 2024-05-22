@@ -3,8 +3,8 @@
 import MainActivityCard from '@/app/_components/activity/main-activity-card';
 import CategoryBar from '@/app/_components/category-bar/category-bar';
 import { Activity, Category } from '@/types/type';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import CalendarDaysIcon from '/public/images/icons/calendar-days.svg';
 
 export default function Home() {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
@@ -31,13 +31,7 @@ export default function Home() {
       {/* TODO: 날짜 포맷을 위한 moment 사용 여부 */}
       <div className="px-24px pb-12px pt-24px">
         <div className="flex cursor-pointer rounded-full border-[1px] border-[#E2E8F0] px-[20px] py-[18px]">
-          <Image
-            src="/images/icons/calendar-days.svg"
-            alt="위치"
-            width={24}
-            height={24}
-            className="mr-[14px]"
-          />
+          <CalendarDaysIcon className="mr-[14px] h-6 w-6" />
           <span>5월 20일 (월)</span>
         </div>
       </div>

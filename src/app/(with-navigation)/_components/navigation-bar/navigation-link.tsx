@@ -1,29 +1,35 @@
-import Image from 'next/image';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { ReactNode } from 'react';
 
 const NavigationLink = ({
   href,
-  icon,
+  Icon,
   text,
+  active,
 }: {
   href: string;
-  icon: ReactNode;
+  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   text: string;
+  active: boolean;
 }) => (
   <Link
     href={href}
     className="col-span-1 flex h-full flex-col items-center justify-center"
   >
-    <div className="relative h-6 w-6">
-      <Image
-        src={`/images/icons/${icon}.svg`}
-        alt={text}
-        width={24}
-        height={24}
-      />
-    </div>
-    <span className="text-sm">{text}</span>
+    <Icon
+      className={cn(` h-6 w-6`, {
+        'stroke-pink-500': active,
+        'stroke-black': !active,
+      })}
+    />
+    <span
+      className={cn(`text-xs`, {
+        'text-pink-600': active,
+        'text-black': !active,
+      })}
+    >
+      {text}
+    </span>
   </Link>
 );
 

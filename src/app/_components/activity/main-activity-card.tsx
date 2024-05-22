@@ -1,8 +1,12 @@
 import LocationInfo from '@/app/_components/info/location-info';
 import ScheduleInfo from '@/app/_components/info/schedule-info';
 import { Activity } from '@/types/type';
-import Image from 'next/image';
 import Link from 'next/link';
+import CalendarIcon from '/public/images/icons/calendar.svg';
+import HeartIcon from '/public/images/icons/heart.svg';
+import MapPinIcon from '/public/images/icons/map-pin.svg';
+import ShareIcon from '/public/images/icons/share.svg';
+
 interface MainActivityCardProps {
   activity: Activity;
 }
@@ -31,22 +35,37 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
           {/* TODO: 디자인 시스템 아이콘 버튼 타입! */}
           <div className="flex">
             <button className="mr-16px">
-              <Image
-                src="/images/icons/heart.svg"
-                alt="like"
-                width={16}
-                height={16}
-              />
+              <HeartIcon width={16} height={16} />
             </button>
             <button>
-              <Image
-                src="/images/icons/share.svg"
-                alt="share"
-                width={16}
-                height={16}
-              />
+              <ShareIcon width={16} height={16} />
             </button>
           </div>
+        </div>
+        <div className="flex">
+          {/* TODO: 임시 pr-10px 제거 */}
+          <div className="flex pr-10px">
+            {/* TODO: color slate 400 */}
+
+            <MapPinIcon width={16} height={16} className="mr-12px" />
+            {/* TODO: 변수 설정 */}
+            {/* <p>{activity.location}</p> */}
+            <p>챕터투</p>
+          </div>
+          {/* TODO: 임시 pl-10px 제거 */}
+          <div className="border-l border-l-[#CBD5E1] pl-10px">
+            {activity.location}
+          </div>
+        </div>
+        <div className="flex">
+          <CalendarIcon
+            width={16}
+            height={16}
+            className="mr-12px stroke-black"
+          />
+          <p>
+            {activity.activityDate} ~ {activity.activityEndDate}
+          </p>
         </div>
         <LocationInfo location={activity.location} address={activity.address} />
         <div className="h-8px"></div>
