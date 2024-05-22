@@ -4,6 +4,7 @@ import MainActivityCard from '@/app/_components/activity/main-activity-card';
 import { Activity } from '@/types/type';
 import React from 'react';
 
+// TODO: 사용하지 않으면 삭제
 interface DetailActivityCardProps {
   activity: Activity;
 }

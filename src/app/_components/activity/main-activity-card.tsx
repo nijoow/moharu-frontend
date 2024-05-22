@@ -1,7 +1,8 @@
+import LocationInfo from '@/app/_components/info/location-info';
+import ScheduleInfo from '@/app/_components/info/schedule-info';
 import { Activity } from '@/types/type';
 import Image from 'next/image';
 import Link from 'next/link';
-
 interface MainActivityCardProps {
   activity: Activity;
 }
@@ -32,7 +33,7 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
             <button className="mr-16px">
               <Image
                 src="/images/icons/heart.svg"
-                alt="위치"
+                alt="like"
                 width={16}
                 height={16}
               />
@@ -40,45 +41,16 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
             <button>
               <Image
                 src="/images/icons/share.svg"
-                alt="위치"
+                alt="share"
                 width={16}
                 height={16}
               />
             </button>
           </div>
         </div>
-        <div className="flex">
-          {/* TODO: 임시 pr-10px 제거 */}
-          <div className="flex pr-10px">
-            {/* TODO: color slate 400 */}
-            <Image
-              src="/images/icons/map-pin.svg"
-              alt="위치"
-              width={16}
-              height={16}
-              className="mr-12px"
-            />
-            {/* TODO: 변수 설정 */}
-            {/* <p>{activity.location}</p> */}
-            <p>챕터투</p>
-          </div>
-          {/* TODO: 임시 pl-10px 제거 */}
-          <div className="border-l border-l-[#CBD5E1] pl-10px">
-            {activity.location}
-          </div>
-        </div>
-        <div className="flex">
-          <Image
-            className="mr-12px"
-            src="/images/icons/calendar.svg"
-            alt="위치"
-            width={16}
-            height={16}
-          />
-          <p>
-            {activity.activityDate} ~ {activity.activityEndDate}
-          </p>
-        </div>
+        <LocationInfo location={activity.location} address={activity.address} />
+        <div className="h-8px"></div>
+        <ScheduleInfo activity={activity} />
       </div>
     </Link>
   );

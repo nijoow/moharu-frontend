@@ -5,9 +5,11 @@ export interface Activity {
   categoryId: string;
   imageUrl: string;
   activityType: string;
+  address: string;
   location: string;
   tags: string[];
   activityDate: string;
+  activityStartDate: string;
   activityEndDate: string;
   registerDate: string;
 }

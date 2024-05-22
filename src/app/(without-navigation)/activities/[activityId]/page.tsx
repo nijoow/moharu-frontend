@@ -1,5 +1,6 @@
-import SubHeader from '@/app/_components/header/sub-header';
-import DetailActivityCard from './_component/detail-activity-card';
+import LocationInfo from '@/app/_components/info/location-info';
+import ScheduleInfo from '@/app/_components/info/schedule-info';
+import { Activity } from '@/types/type';
 import ReservationButton from './_component/reservation-button';
 
 const activities = [
@@ -8,11 +9,14 @@ const activities = [
     title: 'Activity 1',
     description: 'Activity 1 Description',
     categoryId: '1',
-    imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
+    imageUrl: 'https://img.vogue.co.kr/vogue/2021/04/style_608bc2c4e9442.jpg',
     activityType: 'Type 1',
+    address: 'Addressssss',
     location: 'Location 1',
     tags: ['tag1', 'tag2'],
     activityDate: '2022-01-01',
+    activityStartDate: '2022-01-01',
+    activityEndDate: '2022-01-01',
     registerDate: '2021-12-01',
   },
   {
@@ -22,9 +26,12 @@ const activities = [
     categoryId: '2',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
     activityType: 'Type 2',
+    address: 'Addressssss',
     location: 'Location 2',
     tags: ['tag3', 'tag4'],
     activityDate: '2022-02-01',
+    activityStartDate: '2022-01-01',
+    activityEndDate: '2022-01-01',
     registerDate: '2021-12-02',
   },
   {
@@ -34,9 +41,12 @@ const activities = [
     categoryId: '3',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
     activityType: 'Type 3',
+    address: 'Addressssss',
     location: 'Location 3',
     tags: ['tag5', 'tag6'],
     activityDate: '2022-03-01',
+    activityStartDate: '2022-01-01',
+    activityEndDate: '2022-01-01',
     registerDate: '2021-12-03',
   },
   {
@@ -46,9 +56,12 @@ const activities = [
     categoryId: '4',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
     activityType: 'Type 4',
+    address: 'Addressssss',
     location: 'Location 4',
     tags: ['tag7', 'tag8'],
     activityDate: '2022-04-01',
+    activityStartDate: '2022-01-01',
+    activityEndDate: '2022-01-01',
     registerDate: '2021-12-04',
   },
   {
@@ -58,9 +71,12 @@ const activities = [
     categoryId: '5',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
     activityType: 'Type 5',
+    address: 'Addressssss',
     location: 'Location 5',
     tags: ['tag9', 'tag10'],
     activityDate: '2022-05-01',
+    activityStartDate: '2022-01-01',
+    activityEndDate: '2022-01-01',
     registerDate: '2021-12-05',
   },
   {
@@ -70,9 +86,12 @@ const activities = [
     categoryId: '6',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
     activityType: 'Type 6',
+    address: 'Addressssss',
     location: 'Location 6',
     tags: ['tag11', 'tag12'],
     activityDate: '2022-06-01',
+    activityStartDate: '2022-01-01',
+    activityEndDate: '2022-01-01',
     registerDate: '2021-12-06',
   },
   {
@@ -82,9 +101,12 @@ const activities = [
     categoryId: '7',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
     activityType: 'Type 7',
+    address: 'Addressssss',
     location: 'Location 7',
     tags: ['tag13', 'tag14'],
     activityDate: '2022-07-01',
+    activityStartDate: '2022-01-01',
+    activityEndDate: '2022-01-01',
     registerDate: '2021-12-07',
   },
   {
@@ -94,9 +116,12 @@ const activities = [
     categoryId: '8',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
     activityType: 'Type 8',
+    address: 'Addressssss',
     location: 'Location 8',
     tags: ['tag15', 'tag16'],
     activityDate: '2022-08-01',
+    activityStartDate: '2022-01-01',
+    activityEndDate: '2022-01-01',
     registerDate: '2021-12-08',
   },
   {
@@ -106,9 +131,12 @@ const activities = [
     categoryId: '9',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
     activityType: 'Type 9',
+    address: 'Addressssss',
     location: 'Location 9',
     tags: ['tag17', 'tag18'],
     activityDate: '2022-09-01',
+    activityStartDate: '2022-01-01',
+    activityEndDate: '2022-01-01',
     registerDate: '2021-12-09',
   },
   {
@@ -118,37 +146,89 @@ const activities = [
     categoryId: '10',
     imageUrl: '/images/logo/Logo_Image_Main_Moharu.png',
     activityType: 'Type 10',
+    address: 'Addressssss',
     location: 'Location 10',
     tags: ['tag19', 'tag20'],
     activityDate: '2022-10-01',
+    activityStartDate: '2022-01-01',
+    activityEndDate: '2022-01-01',
     registerDate: '2021-12-10',
   },
 ];
 
+const detailInfo = [
+  {
+    label: '관람시간',
+    content: '10:00 ~ 18:00',
+  },
+  {
+    label: '입장료',
+    content: '10,000원',
+  },
+  {
+    label: '주차시설',
+    content: '주차 가능',
+  },
+  {
+    label: '연락처',
+    content: '02-1234-5678',
+  },
+  {
+    label: '홈페이지',
+    content: 'www.naver.com',
+  },
+];
 export default async function ActivityPage({
   params: { activityId },
 }: {
   params: { activityId: string };
 }) {
+  // TODO: query에 있는 acitivityId로 activity 조회 fetch 후 렌더링
   const activity = activities.find(
     activity => activity.activityId === activityId,
-  );
+  ) as Activity;
+  console.log(activity);
   if (!activity) return null;
 
   return (
     <>
-      <SubHeader title="상세" />
-      <DetailActivityCard activity={activity} />
+      {/* TODO:overlay header 필요 */}
+      <div
+        className="h-[460px]"
+        style={{
+          backgroundImage: `url(${activity.imageUrl})`,
+          backgroundSize: 'cover',
+        }}
+      ></div>
 
-      <div>
-        <p>관람 시간</p>
-        <p>휴관일</p>
-        <p>전화번호</p>
-        <p>입장료</p>
-      </div>
-      <div>
-        <p>주소</p>
-        <p>작가</p>
+      <div className="px-24px py-20px">
+        <div className="flex-col border-b  pb-24px">
+          {/* TODO: design system tab_button 컴포넌트로 대체 */}
+          <div className="mb-8px flex inline-flex bg-orange-500 px-12px text-white">
+            전시
+          </div>
+
+          <h4 className="mb-8px text-20px font-bold">{activity.title}</h4>
+
+          <LocationInfo
+            location={activity.location}
+            address={activity.address}
+          />
+          <div className="h-8px"></div>
+          <ScheduleInfo activity={activity} />
+        </div>
+        <div className="py-24px">
+          {detailInfo.map((info, index) => (
+            <div key={index} className="row flex">
+              <div className="label w-[100px]">{info.label}</div>
+              <div className="content">{info.content}</div>
+            </div>
+          ))}
+          <div className="row">
+            <div className="label"></div>
+            <div className="content"></div>
+          </div>
+        </div>
       </div>
       <ReservationButton activityId={activity.activityId} />
     </>
