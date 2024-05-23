@@ -11,10 +11,13 @@ import {
 import { Activity, Category } from '@/types/type';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
+  const { data: session } = useSession();
+  console.log(session);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [date, setDate] = useState<Date>();

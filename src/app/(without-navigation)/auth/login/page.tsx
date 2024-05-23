@@ -32,7 +32,7 @@ export default function LoginPage() {
         <form
           action={async () => {
             'use server';
-            await signIn('google');
+            await signIn('google', { redirectTo: '/' });
           }}
         >
           <Button
@@ -52,7 +52,7 @@ export default function LoginPage() {
         <form
           action={async () => {
             'use server';
-            await signIn('kakao');
+            await signIn('kakao', { redirectTo: '/' });
           }}
         >
           <Button

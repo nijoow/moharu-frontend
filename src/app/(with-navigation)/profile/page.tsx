@@ -1,5 +1,8 @@
+import { auth, signOut } from '@/auth';
+import { Button } from '@/components/ui/button';
 import { User } from '@/types/type';
 import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 import SectionList from './_component/section-list';
 
 const list = [
@@ -69,7 +72,10 @@ const user: User = {
   deletedAt: '2024-01-01T00:00:00Z',
 };
 
-export default function Profile() {
+export default async function Profile() {
+  const session = await auth();
+  console.log(session);
+
   return (
     <div className="px-24px">
       {/* TODO: 공통 헤더 처리 */}
@@ -78,14 +84,14 @@ export default function Profile() {
         <div
           className="mr-24px h-[80px] w-[80px] rounded-full"
           style={{
-            backgroundImage: `url('${user.profileImage}')`,
+            backgroundImage: `url('${session?.user?.image ?? user.profileImage}')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         ></div>
         <div>
           <div className="flex">
-            <p className="mb-8px">{user.name}</p>
+            <p className="mb-8px">{session?.user?.name ?? user.name}</p>
             <ChevronRight width={24} height={24} />
           </div>
           <div className="flex">
@@ -106,7 +112,17 @@ export default function Profile() {
       <div>
         <p>서비스 이용약관 / 개인정보처리방침</p>
         <p>버전 1.0.0</p>
-        <p>로그아웃</p>
+        <Link href="/auth/login">
+          <Button type="button">로그인 페이지</Button>
+        </Link>
+        <form
+          action={async () => {
+            'use server';
+            await signOut();
+          }}
+        >
+          <Button type="submit">로그아웃</Button>
+        </form>
       </div>
     </div>
   );
