@@ -13,7 +13,7 @@ export default async function ReservationPage({
     'utf8',
   );
   const activitys: Activity[] = JSON.parse(file);
-  const activity = activitys.find(activity => activity.id === id);
+  const activity = activitys.find(activity => String(activity.id) === id);
   if (!activity) return null;
 
   return (

@@ -1,5 +1,4 @@
 import React from 'react';
-import MainHeader from '../_components/header/main-header';
 import '../globals.css';
 import NavigationBar from './_components/navigation-bar/navigation-bar';
 
@@ -10,7 +9,6 @@ export default function Layout({
 }>) {
   return (
     <>
-      <MainHeader />
       <main className="flex flex-auto flex-col overflow-auto">{children}</main>
       <NavigationBar />
     </>

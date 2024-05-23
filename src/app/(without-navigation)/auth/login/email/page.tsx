@@ -9,7 +9,7 @@ export default function LoginEmailPage() {
       <SubHeader />
       <div className="mb-10 mt-5 flex w-full justify-between px-10">
         <span className="font-medium">이메일로 로그인합니다.</span>
-        <Link href="/auth/signup" className="font-medium text-pink-500">
+        <Link href="/auth/signup/email" className="font-medium text-pink-500">
           회원가입
         </Link>
       </div>

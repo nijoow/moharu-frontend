@@ -40,6 +40,7 @@ const config = {
         '60px': '60px',
       },
       fontSize: {
+        '11px': '11px',
         '12px': '12px',
         '13px': '13px',
         '14px': '14px',
