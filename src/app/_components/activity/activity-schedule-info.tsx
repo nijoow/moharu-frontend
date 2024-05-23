@@ -11,7 +11,7 @@ const ActivityScheduleInfo: React.FC<ActivityScheduleInfoProps> = ({
   <div className="flex">
     <CalendarIcon width={20} height={20} className="mr-12px stroke-slate-400" />
     <p>
-      {activity.activityStartDate} ~ {activity.activityEndDate}
+      {activity.startDate} ~ {activity.endDate}
     </p>
   </div>
 );
