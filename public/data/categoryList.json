@@ -1,38 +1,38 @@
 [
   {
-    "categoryId": "01",
+    "id": 0,
     "name": "추천",
-    "description": "Category 1 Description",
-    "icon": "wishlist"
+    "description": "예술과 관련된 내용",
+    "icon": "gift"
   },
   {
-    "categoryId": "02",
+    "id": 1,
     "name": "예술",
-    "description": "Category 2 Description",
+    "description": "예술과 관련된 내용",
     "icon": "brush"
   },
   {
-    "categoryId": "03",
-    "name": "독서",
-    "description": "Category 3 Description",
-    "icon": "book-open"
+    "id": 2,
+    "name": "영화",
+    "description": "영화와 관련된 내용",
+    "icon": "book"
   },
   {
-    "categoryId": "04",
-    "name": "독서",
-    "description": "Category 4 Description",
-    "icon": "book-open"
+    "id": 3,
+    "name": "운동",
+    "description": "운동과 관련된 내용",
+    "icon": "bar-chart-4"
   },
   {
-    "categoryId": "05",
-    "name": "독서",
-    "description": "Category 5 Description",
-    "icon": "book-open"
+    "id": 4,
+    "name": "팝업스토어",
+    "description": "팝업스토어와 관련된 내용",
+    "icon": "message-circle"
   },
   {
-    "categoryId": "06",
+    "id": 5,
     "name": "독서",
-    "description": "Category 6 Description",
-    "icon": "book-open"
+    "description": "독서와 관련된 내용",
+    "icon": "message-circle"
   }
 ]
