@@ -20,7 +20,7 @@ export default async function ReservationPage({
     <>
       <SubHeader title="예약하기" />
       {activity.title} 예약페이지
-      <PaymentButton id={activity.id}></PaymentButton>
+      <PaymentButton id={String(activity.id)}></PaymentButton>
     </>
   );
 }
