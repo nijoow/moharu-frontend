@@ -1,7 +1,7 @@
 'use client';
 
 import ActiveLocationInfo from '@/app/_components/activity/activity-location-info';
-import ActiveScheduleInfo from '@/app/_components/activity/activity-schedule-info';
+import ActivityScheduleInfo from '@/app/_components/activity/activity-schedule-info';
 import ActivityTypeBadge from '@/app/_components/activity/activity-type-badge';
 import { ShareDialog } from '@/app/_components/dialog/share-dialog';
 import { useToast } from '@/components/ui/use-toast';
@@ -18,7 +18,7 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
   const { toast } = useToast();
   const moharuHomepageUrl = 'https://www.moharu.site';
 
-  const activityUrl = `${moharuHomepageUrl}/activities/${activity.activityId}`;
+  const activityUrl = `${moharuHomepageUrl}/activities/${activity.id}`;
 
   const activityType = getActivityType(activity.type);
 
@@ -31,14 +31,11 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
   return (
     <>
       <div className="p-24px">
-        <Link
-          href={`/activities/${activity.activityId}`}
-          className="relative mb-20px"
-        >
+        <Link href={`/activities/${activity.id}`} className="relative mb-20px">
           <div
             className="h-[340px] rounded-[12px]"
             style={{
-              backgroundImage: `url(${activity.imageUrl})`,
+              backgroundImage: `url(${activity.coverImage})`,
               backgroundSize: 'cover',
             }}
           ></div>
@@ -67,7 +64,7 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
             address={activity.address}
           />
           <div className="h-8px"></div>
-          <ActiveScheduleInfo activity={activity} />
+          <ActivityScheduleInfo activity={activity} />
         </div>
       </div>
     </>

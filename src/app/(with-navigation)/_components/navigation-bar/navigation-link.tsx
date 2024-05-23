@@ -19,13 +19,13 @@ const NavigationLink = ({
     <Icon
       className={cn(` mb-4px h-6 w-6`, {
         'stroke-pink-500': active,
-        'stroke-black': !active,
+        'stroke-slate-500': !active,
       })}
     />
     <span
       className={cn(`text-xs`, {
         'text-pink-600': active,
-        'text-black': !active,
+        'text-slate-500': !active,
       })}
     >
       {text}

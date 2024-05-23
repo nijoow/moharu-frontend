@@ -19,7 +19,7 @@ const NavigationBar = () => {
     {
       href: '/wish-list',
       Icon: HeartIcon,
-      text: '좋아요',
+      text: '위시리스트',
       active: pathname.includes('/wish-list'),
     },
     {
@@ -31,7 +31,7 @@ const NavigationBar = () => {
   ];
 
   return (
-    <nav className="sticky bottom-0 left-0 grid h-16 w-full flex-none grid-cols-3">
+    <nav className="sticky bottom-0 left-0 grid h-16 w-full flex-none grid-cols-3 border-t-[1px] border-slate-200">
       {mobileNavigationList.map(({ href, Icon, text, active }) => (
         <MobileNavigationLink
           key={text}

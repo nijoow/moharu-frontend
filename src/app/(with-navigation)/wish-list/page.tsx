@@ -10,10 +10,16 @@ export default async function WishListPage() {
   const wishLists: Activity[] = JSON.parse(file);
 
   return (
-    <div className="grid h-full w-full grid-cols-2 items-center">
-      {wishLists.map(wishList => (
-        <WishListCard key={wishList.activityId} wishList={wishList} />
-      ))}
-    </div>
+    <>
+      {/* TODO: 헤더 처리 (위시리스트, 프로필) */}
+      <div>위시리스트</div>
+      {/* TODO: 전체/전시/모임/장소 탭 구조 */}
+      <div>전체/전시/모임/장소 탭 구조</div>
+      <div className="grid h-full w-full grid-cols-2">
+        {wishLists.map(wishList => (
+          <WishListCard key={wishList.id} wishList={wishList} />
+        ))}
+      </div>
+    </>
   );
 }

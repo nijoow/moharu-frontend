@@ -1,17 +1,14 @@
 export interface Activity {
-  activityId: string;
+  id: number;
+  categoryId: number;
   title: string;
-  description: string;
-  categoryId: string;
-  imageUrl: string;
+  coverImage: string;
   type: string;
   address: string;
+  status: string;
+  startDate: string;
+  endDate: string;
   location: string;
-  tags: string[];
-  activityDate: string;
-  activityStartDate: string;
-  activityEndDate: string;
-  registerDate: string;
 }
 
 export interface Category {

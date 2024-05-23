@@ -24,7 +24,6 @@ export default function Home() {
       .then(res => res.json())
       .then(data => {
         setCategoryList(data);
-        console.log('data', data);
       });
   }, []);
 
@@ -73,7 +72,7 @@ export default function Home() {
       {/* TODO: 카테고리 바 sticky 처리 여부 */}
       <CategoryBar categoryList={categoryList} />
       {activities.map(activity => (
-        <MainActivityCard key={activity.activityId} activity={activity} />
+        <MainActivityCard key={activity.id} activity={activity} />
       ))}
     </>
   );
