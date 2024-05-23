@@ -23,10 +23,14 @@ export interface User {
   email: string;
   name: string;
   profileImage: string;
-  age: number;
-  socialId: string;
   mbti: string;
+  ageRange: string;
+  gender: string;
   region: string;
+  socialType: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
 }
 
 export enum ACTIVITY_TYPE {

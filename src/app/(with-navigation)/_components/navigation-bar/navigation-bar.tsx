@@ -23,10 +23,10 @@ const NavigationBar = () => {
       active: pathname.includes('/wish-list'),
     },
     {
-      href: '/my-page',
+      href: '/profile',
       Icon: UserIcon,
       text: '프로필',
-      active: pathname.includes('/my-page'),
+      active: pathname.includes('/profile'),
     },
   ];
 
