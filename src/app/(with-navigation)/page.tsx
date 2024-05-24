@@ -11,19 +11,17 @@ import {
 import { Activity, Category } from '@/types/type';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const { data: session } = useSession();
-  console.log(session);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [date, setDate] = useState<Date>();
 
   useEffect(() => {
-    fetch(`data/categoryList.json`)
+    // EXAMPLE: 클라이언트 컴포넌트에서 api 요청
+    fetch(`/apis/activities-category`)
       .then(res => res.json())
       .then(data => {
         setCategoryList(data);
@@ -31,7 +29,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetch('data/mainActivityList.json')
+    fetch('/apis/activities')
       .then(response => response.json())
       .then(data => setActivities(data));
   }, []);
@@ -74,7 +72,7 @@ export default function Home() {
       </div>
       {/* TODO: 카테고리 바 sticky 처리 여부 */}
       <CategoryBar categoryList={categoryList} />
-      {activities.map(activity => (
+      {activities?.map(activity => (
         <MainActivityCard key={activity.id} activity={activity} />
       ))}
     </>

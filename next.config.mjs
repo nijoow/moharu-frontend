@@ -12,6 +12,14 @@ const nextConfig = {
 
     return config;
   },
+  async rewrites() {
+    return [
+      {
+        source: '/apis/:path*',
+        destination: `https://api.moharu.site/:path*`,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -74,7 +74,13 @@ const user: User = {
 
 export default async function Profile() {
   const session = await auth();
-  console.log(session);
+  // EXAMPLE: 서버 컴포넌트에서 api 요청 예시
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/user`,
+  );
+  const users = await response.json();
+
+  console.log(users);
 
   return (
     <div className="px-24px">
