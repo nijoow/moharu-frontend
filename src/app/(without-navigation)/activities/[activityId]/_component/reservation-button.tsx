@@ -15,7 +15,7 @@ const ReservationButton: React.FC<ReservationButtonProps> = ({ id }) => {
       onClick={() => router.push(`/activities/${id}/reservation`)}
       className="sticky bottom-0 left-0 mt-auto w-full"
     >
-      예약하기
+      위시리스트에 추가하기
     </Button>
   );
 };

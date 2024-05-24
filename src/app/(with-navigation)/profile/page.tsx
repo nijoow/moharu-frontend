@@ -3,6 +3,7 @@ import { auth, signOut } from '@/auth';
 import { Button } from '@/components/ui/button';
 import { User } from '@/types/type';
 import { ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import SectionList from './_component/section-list';
 
@@ -82,7 +83,7 @@ export default async function Profile() {
       <TitleHeader title="프로필" />
       <div className="px-24px">
         {/* TODO: 공통 헤더 처리 */}
-        <div className="flex items-center">
+        <div className="mb-20px flex items-center">
           <div
             className="mr-24px h-[80px] w-[80px] rounded-full"
             style={{
@@ -92,11 +93,12 @@ export default async function Profile() {
             }}
           ></div>
           <div>
-            <div className="flex">
+            {/* TODO: 프로필 수정 클릭시 팝업 */}
+            <div className="flex cursor-pointer">
               <p className="mb-8px">{session?.user?.name ?? user.name}</p>
               <ChevronRight width={24} height={24} />
             </div>
-            <div className="flex">
+            <div className="flex text-14px">
               <div>{user.mbti}</div>
               <div className="mx-2 border-l"></div>
               <div>여성</div>
@@ -108,11 +110,29 @@ export default async function Profile() {
           </div>
         </div>
 
-        <SectionList title="신청/예약한 활동" list={list} totalCount={12} />
-        <div className="h-20px"></div>
+        {/* <SectionList title="신청/예약한 활동" list={list} totalCount={12} /> */}
+        {/* <div className="h-20px"></div> */}
         <SectionList title="위시리스트" list={list} totalCount={23} />
-        <div>
-          <p>서비스 이용약관 / 개인정보처리방침</p>
+        <div className="my-20px flex justify-between rounded-[12px] border-[1px] border-[#E2E8F0] p-24px">
+          <div>
+            <div className="mb-10px font-medium">
+              <p>전시, 행사, 모임, 장소 등</p>
+              <p>다양한 오프라인 활동을</p>
+              <p>제보해주세요!</p>
+            </div>
+
+            <p className="text-12px text-slate-600">moharu.site@gmail.com</p>
+          </div>
+
+          <Image
+            src="/images/banners/banner_gift.svg"
+            alt="메일"
+            width={105}
+            height={110}
+          />
+        </div>
+        <div className="text-14px">
+          <p className="mb-20px">서비스 이용약관 / 개인정보처리방침</p>
           <p>버전 1.0.0</p>
           <Link href="/auth/login">
             <Button type="button">로그인 페이지</Button>

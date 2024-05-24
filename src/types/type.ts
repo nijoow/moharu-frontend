@@ -37,6 +37,7 @@ export enum ACTIVITY_TYPE {
   EVENT = 'event',
   MEETING = 'meeting',
   PLACE = 'place',
+  NONE = 'none',
 }
 
 export type ActivityType = ACTIVITY_TYPE;

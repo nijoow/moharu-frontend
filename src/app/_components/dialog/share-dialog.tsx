@@ -1,4 +1,4 @@
-import { Copy, ShareIcon } from 'lucide-react';
+import { ShareIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -8,49 +8,68 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogIcon,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
+import { Activity } from '@/types/type';
+import Image from 'next/image';
 
-export function ShareDialog({ url }: { url: string }) {
-  const onCopyLink = () => {
-    toast({
-      description: 'Copy complete!',
-    });
+export function ShareDialog({ activity }: { activity: Activity }) {
+  const moharuHomepageUrl = 'https://www.moharu.site';
+  const activityUrl = `${moharuHomepageUrl}/activities/${activity.id}`;
+
+  const onCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(activityUrl);
+      toast({
+        description: 'Copy complete!',
+      });
+    } catch (err) {
+      toast({
+        description: 'Failed to copy text',
+      });
+    }
   };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button>
+        <button
+          type="button"
+          className="ml-auto flex h-10 w-10 items-center justify-center rounded-full bg-white/60"
+        >
           <ShareIcon width={24} height={24} className="stroke-slate-900" />
         </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle>Share link</DialogTitle>
+          <DialogIcon icon="link" />
+
           <DialogDescription>
-            Anyone who has this link will be able to view this.
+            모하루의 추천 활동을 다른 사람과 공유해보세요!
           </DialogDescription>
         </DialogHeader>
-        <div className="flex items-center space-x-2">
-          <div className="grid flex-1 gap-2">
-            <Label htmlFor="link" className="sr-only">
-              Link
-            </Label>
-            <Input id="link" defaultValue={url} readOnly />
+        <div className="flex w-full items-center gap-3">
+          {/* TODO: activity 정보 받아오기 */}
+          <Image
+            src={activity.coverImage}
+            width={80}
+            height={80}
+            alt="이미지"
+            className="flex-none overflow-hidden rounded-lg bg-slate-500"
+          />
+          <div className="flex flex-auto flex-col">
+            <h4 className="text-20px font-bold">모하루</h4>
+            <p className="w-auto break-all text-12px text-slate-500">
+              {activityUrl}
+            </p>
           </div>
-          <Button type="submit" size="sm" className="px-3" onClick={onCopyLink}>
-            <span className="sr-only">Copy</span>
-            <Copy className="h-4 w-4" />
-          </Button>
         </div>
         <DialogFooter className="sm:justify-start">
           <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
+            <Button type="button" className="w-full" onClick={onCopyLink}>
+              링크 복사
             </Button>
           </DialogClose>
         </DialogFooter>

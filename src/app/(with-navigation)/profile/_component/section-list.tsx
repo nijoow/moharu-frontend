@@ -1,4 +1,6 @@
+import { Activity } from '@/types/type';
 import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 const SectionList = ({
   title,
@@ -6,13 +8,13 @@ const SectionList = ({
   totalCount,
 }: {
   title: string;
-  list: any[];
+  list: Activity[];
   totalCount: number;
 }) => (
   <div>
     <div className="mb-12px flex h-[38px] items-center justify-between">
       <div className="flex">
-        <div>{title}</div>
+        <div className="mr-8px font-medium">{title}</div>
         <div className="text-pink-500">{totalCount}</div>
       </div>
       <button>
@@ -21,15 +23,17 @@ const SectionList = ({
     </div>
     <div className="grid grid-cols-3 gap-x-3">
       {list.slice(0, 3).map(item => (
-        <div
-          key={item.id}
-          className="h-[140px] rounded-[12px]"
-          style={{
-            backgroundImage: `url(${item.coverImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        ></div>
+        <Link href={`/activities/${item.id}`}>
+          <div
+            key={item.id}
+            className="h-[140px] w-full rounded-[12px]"
+            style={{
+              backgroundImage: `url(${item.coverImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          ></div>
+        </Link>
       ))}
     </div>
   </div>

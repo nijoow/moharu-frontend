@@ -5,7 +5,7 @@ import ActivityScheduleInfo from '@/app/_components/activity/activity-schedule-i
 import ActivityTypeBadge from '@/app/_components/activity/activity-type-badge';
 import { ShareDialog } from '@/app/_components/dialog/share-dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { getActivityType } from '@/lib/utils';
+import { getActivityInfoByType } from '@/lib/utils';
 import { Activity } from '@/types/type';
 import Link from 'next/link';
 import HeartIcon from '/public/images/icons/heart.svg';
@@ -16,11 +16,7 @@ interface MainActivityCardProps {
 
 const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
   const { toast } = useToast();
-  const moharuHomepageUrl = 'https://www.moharu.site';
-
-  const activityUrl = `${moharuHomepageUrl}/activities/${activity.id}`;
-
-  const activityType = getActivityType(activity.type);
+  const activityType = getActivityInfoByType(activity.type).type;
 
   const onClickLikeBtn = () => {
     toast({
@@ -56,7 +52,7 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
                   className="stroke-slate-900"
                 />
               </button>
-              <ShareDialog url={activityUrl} />
+              <ShareDialog activity={activity} />
             </div>
           </div>
           <ActiveLocationInfo

@@ -75,9 +75,11 @@ export default function Home() {
       </div>
       {/* TODO: 카테고리 바 sticky 처리 여부 */}
       <CategoryBar categoryList={categoryList} />
-      {activities?.map(activity => (
-        <MainActivityCard key={activity.id} activity={activity} />
-      ))}
+      {activities.length > 0
+        ? activities?.map(activity => (
+            <MainActivityCard key={activity.id} activity={activity} />
+          ))
+        : null}
     </>
   );
 }

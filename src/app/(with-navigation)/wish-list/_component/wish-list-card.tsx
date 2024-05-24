@@ -1,5 +1,5 @@
 import ActivityTypeBadge from '@/app/_components/activity/activity-type-badge';
-import { getActivitySchedule, getActivityType } from '@/lib/utils';
+import { getActivityInfoByType, getActivitySchedule } from '@/lib/utils';
 import { Activity } from '@/types/type';
 import Link from 'next/link';
 
@@ -8,11 +8,11 @@ interface WishListCardProps {
 }
 const WishListCard: React.FC<WishListCardProps> = ({ wishList }) => {
   const activitySchedule = getActivitySchedule(wishList);
-  const activityType = getActivityType(wishList.type);
+  const activityType = getActivityInfoByType(wishList.type).type;
   return (
     <Link
       href={`/activities/${wishList.id}`}
-      className="col-span-1 flex w-full flex-col p-6"
+      className="col-span-1 flex h-[320px] w-full flex-col"
     >
       <div className="relative">
         <div

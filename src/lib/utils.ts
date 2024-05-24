@@ -1,4 +1,4 @@
-import { ACTIVITY_TYPE, Activity, ActivityType } from '@/types/type';
+import { ACTIVITY_TYPE, Activity } from '@/types/type';
 import { clsx, type ClassValue } from 'clsx';
 import moment from 'moment';
 import { twMerge } from 'tailwind-merge';
@@ -7,23 +7,41 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getActivityType(activityType: string): ActivityType {
+interface ActivityInfo {
+  type: ACTIVITY_TYPE;
+  linkText: string;
+}
+
+export function getActivityInfoByType(activityType: string): ActivityInfo {
   switch (activityType) {
     case 'event':
-      return ACTIVITY_TYPE.EVENT;
+      return {
+        type: ACTIVITY_TYPE.EVENT,
+        linkText: '전시 상세 내용 보러가기',
+      };
     case 'meeting':
-      return ACTIVITY_TYPE.MEETING;
+      return {
+        type: ACTIVITY_TYPE.MEETING,
+        linkText: '모임 상세 내용 보러가기',
+      };
     case 'place':
-      return ACTIVITY_TYPE.PLACE;
+      return {
+        type: ACTIVITY_TYPE.EVENT,
+        linkText: '홈페이지 보러가기',
+      };
     default:
-      throw new Error(`Invalid activity type: ${activityType}`);
+      return {
+        type: ACTIVITY_TYPE.EVENT,
+        linkText: '링크 없음',
+      };
+    // throw new Error(`Invalid activity type: ${activityType}`);
   }
 }
 
 // TODO: getActivitySchedule activity 필드 맞추기
 export const getActivitySchedule = (activity: Activity) => {
-  const startDate = moment(activity.startDate).format('YYYY.MM.DD일');
-  const endDate = moment(activity.endDate).format('YYYY.MM.DD일');
+  const startDate = moment(activity.startDate).format('YYYY.MM.DD');
+  const endDate = moment(activity.endDate).format('YYYY.MM.DD');
 
   switch (activity.type) {
     case 'event':
