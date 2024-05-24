@@ -1,11 +1,9 @@
 import { Toaster } from '@/components/ui/toaster';
+import { pretendard } from '@/font/font';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import React from 'react';
 import AuthSessionProvider from './_context/AuthSessionProvider';
 import './globals.css';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: '모하루',
@@ -21,7 +19,7 @@ export default function RootLayout({
   return (
     <AuthSessionProvider>
       <html lang="en" className="h-full">
-        <body className={`${inter.className} h-full `}>
+        <body className={`${pretendard.variable} font-pretendard h-full `}>
           <div className="relative mx-auto flex h-full max-w-md flex-col shadow-md">
             {children}
           </div>
