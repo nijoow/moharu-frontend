@@ -1,6 +1,7 @@
 import ActiveLocationInfo from '@/app/_components/activity/activity-location-info';
 import ActivityScheduleInfo from '@/app/_components/activity/activity-schedule-info';
 import ActivityTypeBadge from '@/app/_components/activity/activity-type-badge';
+import Header from '@/app/_components/header/header';
 import { getActivityType } from '@/lib/utils';
 import { Activity } from '@/types/type';
 import ReservationButton from './_component/reservation-button';
@@ -70,6 +71,7 @@ export default async function ActivityPage({
   return (
     <>
       {/* TODO:overlay header 필요 */}
+      <Header backButton shareButton transparent={true} />
       <div
         className="h-[460px]"
         style={{
@@ -77,7 +79,6 @@ export default async function ActivityPage({
           backgroundSize: 'cover',
         }}
       ></div>
-
       <div className="px-24px py-20px">
         <div className="flex-col border-b  pb-24px">
           <ActivityTypeBadge type={activityType} />

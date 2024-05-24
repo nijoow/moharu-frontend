@@ -1,4 +1,4 @@
-import SubHeader from '@/app/_components/header/sub-header';
+import Header from '@/app/_components/header/header';
 import { Activity } from '@/types/type';
 import { promises as fs } from 'fs';
 import PaymentButton from './_components/payment-button';
@@ -18,7 +18,7 @@ export default async function ReservationPage({
 
   return (
     <>
-      <SubHeader title="예약하기" />
+      <Header title="예약하기" backButton />
       {activity.title} 예약페이지
       <PaymentButton id={String(activity.id)}></PaymentButton>
     </>

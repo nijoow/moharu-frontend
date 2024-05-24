@@ -1,3 +1,4 @@
+import TitleHeader from '@/app/_components/header/title-header';
 import { auth, signOut } from '@/auth';
 import { Button } from '@/components/ui/button';
 import { User } from '@/types/type';
@@ -77,53 +78,55 @@ export default async function Profile() {
   console.log(session);
 
   return (
-    <div className="px-24px">
-      {/* TODO: 공통 헤더 처리 */}
-      <div>프로필</div>
-      <div className="flex items-center">
-        <div
-          className="mr-24px h-[80px] w-[80px] rounded-full"
-          style={{
-            backgroundImage: `url('${session?.user?.image ?? user.profileImage}')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        ></div>
-        <div>
-          <div className="flex">
-            <p className="mb-8px">{session?.user?.name ?? user.name}</p>
-            <ChevronRight width={24} height={24} />
-          </div>
-          <div className="flex">
-            <div>{user.mbti}</div>
-            <div className="mx-2 border-l"></div>
-            <div>여성</div>
-            <div className="mx-2 border-l"></div>
-            <div>{user.ageRange}</div>
-            <div className="mx-2 border-l"></div>
-            <div>{user.region}</div>
+    <>
+      <TitleHeader title="프로필" />
+      <div className="px-24px">
+        {/* TODO: 공통 헤더 처리 */}
+        <div className="flex items-center">
+          <div
+            className="mr-24px h-[80px] w-[80px] rounded-full"
+            style={{
+              backgroundImage: `url('${session?.user?.image ?? user.profileImage}')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          ></div>
+          <div>
+            <div className="flex">
+              <p className="mb-8px">{session?.user?.name ?? user.name}</p>
+              <ChevronRight width={24} height={24} />
+            </div>
+            <div className="flex">
+              <div>{user.mbti}</div>
+              <div className="mx-2 border-l"></div>
+              <div>여성</div>
+              <div className="mx-2 border-l"></div>
+              <div>{user.ageRange}</div>
+              <div className="mx-2 border-l"></div>
+              <div>{user.region}</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <SectionList title="신청/예약한 활동" list={list} totalCount={12} />
-      <div className="h-20px"></div>
-      <SectionList title="위시리스트" list={list} totalCount={23} />
-      <div>
-        <p>서비스 이용약관 / 개인정보처리방침</p>
-        <p>버전 1.0.0</p>
-        <Link href="/auth/login">
-          <Button type="button">로그인 페이지</Button>
-        </Link>
-        <form
-          action={async () => {
-            'use server';
-            await signOut();
-          }}
-        >
-          <Button type="submit">로그아웃</Button>
-        </form>
+        <SectionList title="신청/예약한 활동" list={list} totalCount={12} />
+        <div className="h-20px"></div>
+        <SectionList title="위시리스트" list={list} totalCount={23} />
+        <div>
+          <p>서비스 이용약관 / 개인정보처리방침</p>
+          <p>버전 1.0.0</p>
+          <Link href="/auth/login">
+            <Button type="button">로그인 페이지</Button>
+          </Link>
+          <form
+            action={async () => {
+              'use server';
+              await signOut();
+            }}
+          >
+            <Button type="submit">로그아웃</Button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
