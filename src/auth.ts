@@ -21,7 +21,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token, user }) {
       const newSession = {
-        accessToken: token.accessToken,
         id: token.sub,
         ...session,
       };
