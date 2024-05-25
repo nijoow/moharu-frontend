@@ -12,28 +12,6 @@ import { Activity } from '@/types/type';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const detailInfo = [
-  {
-    label: '관람시간',
-    content: '10:00 ~ 18:00',
-  },
-  {
-    label: '입장료',
-    content: '10,000원',
-  },
-  {
-    label: '주차시설',
-    content: '주차 가능',
-  },
-  {
-    label: '연락처',
-    content: '02-1234-5678',
-  },
-  {
-    label: '홈페이지',
-    content: 'www.naver.com',
-  },
-];
 export default function ActivityPage() {
   const params = useParams<{ activityId: string }>();
   const [activity, setActivity] = useState<Activity | null>(null);
@@ -46,7 +24,12 @@ export default function ActivityPage() {
   useEffect(() => {
     fetch(`/apis/activities/${params.activityId}`)
       .then(response => response.json())
-      .then(data => setActivity(data));
+      .then(data =>
+        setActivity({
+          ...data.activity,
+          isWish: data.isWish,
+        }),
+      );
   }, []);
 
   if (!activity) return null;
@@ -55,7 +38,6 @@ export default function ActivityPage() {
 
   return (
     <>
-      {/* TODO:overlay header 필요 */}
       <Header backButton shareButton transparent={true} />
       <div className="h-full">
         <BackgroundImageWithPlaceholder
@@ -97,6 +79,7 @@ export default function ActivityPage() {
           )}
         </div>
       </div>
+      {/* TODO: activity.isWish 값에 따라 처리 */}
       <Button size="big" onClick={onClickLikeBtn}>
         위시리스트에 저장하기
       </Button>
