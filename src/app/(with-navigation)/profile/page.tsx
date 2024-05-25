@@ -1,109 +1,46 @@
 import BackgroundImageWithPlaceholder from '@/app/_components/common/background-image-with-placeholder';
 import { DevelopmentPendingDialog } from '@/app/_components/dialog/development-pending-dialog';
 import TitleHeader from '@/app/_components/header/title-header';
-import { auth, signOut } from '@/auth';
+import { signOut } from '@/auth';
+import { fetchWithToken } from '@/lib/fetch';
 import Image from 'next/image';
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import DoughnutChart from './_component/doughnut-chart';
 import SectionList from './_component/section-list';
 
-const data = {
-  userProfile: {
-    id: 1,
-    name: '멍멍이',
-    profileImage:
-      'https://i.pinimg.com/736x/53/7e/f5/537ef59499259ba707068742f91a10f8.jpg',
-    mbti: 'ENTJ',
-    ageRange: '30대',
-    gender: '여성',
-    region: '강남',
-  },
-  activityWishes: [
-    {
-      id: 2,
-      activitiesId: 3,
-      activity: {
-        id: 3,
-        coverImage: null,
-        type: 'event',
-        activityCategory: {
-          name: '운동',
-        },
-      },
-    },
-    {
-      id: 3,
-      activitiesId: 2,
-      activity: {
-        id: 2,
-        coverImage: null,
-        type: 'place',
-        activityCategory: {
-          name: '영화',
-        },
-      },
-    },
-    {
-      id: 1,
-      activitiesId: 1,
-      activity: {
-        id: 1,
-        coverImage: null,
-        type: 'meeting',
-        activityCategory: {
-          name: '책',
-        },
-      },
-    },
-  ],
-  wishTotalCount: 3,
-  categoryCount: {
-    운동: 1,
-    영화: 1,
-    책: 1,
-  },
-};
 export default async function Profile() {
-  const session = await auth();
+  // const session = await auth();
 
-  if (!session) redirect('/auth/login');
+  // if (!session) redirect('/auth/login');
 
+  const data = await fetchWithToken('https://api.moharu.site/user');
+
+  const userProfile = data.userProfile;
   const activityWishes = data.activityWishes;
-
   const wishTotalCount = data.wishTotalCount;
 
-  // const session = await auth();
-  // console.log(session);
-
-  // useEffect(() => {
-  //   // TODO: API 연동
-
-  //   setUserProfile(data.userProfile);
-  //   setActivityWishes(data.activityWishes);
-  //   setWishTotalCount(data.wishTotalCount);
-  // }, []);
+  const categoryCount = data.categoryCount;
+  // TODO: 값 확인
+  const graphData = Object.values(categoryCount);
 
   return (
     <>
       <TitleHeader title="프로필" />
-      <div className="px-24px">
+      <div className="bg-white px-24px">
         <div className="mb-20px flex items-center">
           <BackgroundImageWithPlaceholder
-            src={session.user.image}
+            src={userProfile.image}
             className="mr-24px h-[80px] w-[80px] rounded-full"
           />
-
           <div>
-            <DevelopmentPendingDialog name={session.user.name} />
+            <DevelopmentPendingDialog name={userProfile.name} />
             <div className="flex text-14px">
-              <div>{session.user.mbti}</div>
+              <div>{userProfile.mbti}</div>
               <div className="mx-2 border-l"></div>
-              <div>{session.user.gender}</div>
+              <div>{userProfile.gender}</div>
               <div className="mx-2 border-l"></div>
-              <div>{session.user.ageRange}</div>
+              <div>{userProfile.ageRange}</div>
               <div className="mx-2 border-l"></div>
-              <div>{session.user.region}</div>
+              <div>{userProfile.region}</div>
             </div>
           </div>
         </div>
@@ -114,7 +51,7 @@ export default async function Profile() {
             나의 취향 분석은 위시리스트를 기반으로 제공됩니다.
           </span>
           <div className="w-full">
-            <DoughnutChart data={[1, 2, 3]} />
+            <DoughnutChart data={graphData as [number, number, number]} />
           </div>
         </div>
         {/* <SectionList title="신청/예약한 활동" list={list} totalCount={12} /> */}
@@ -124,11 +61,9 @@ export default async function Profile() {
           list={activityWishes}
           totalCount={wishTotalCount}
         />
-        <div
+        <a
+          href="mailto:moharu.site@gmail.com?subject=Activity Link&body=모하루에게 전시, 행사, 모임, 장소 등 다양한 오프라인 활동을 제보해주세요!"
           className="my-20px flex cursor-pointer justify-between rounded-[12px] border-[1px] border-[#E2E8F0] p-24px"
-          onClick={() => {
-            window.location.href = `mailto:moharu.site@gmail.com?subject=Activity Link&body=모하루에게 전시, 행사, 모임, 장소 등 다양한 오프라인 활동을 제보해주세요!`;
-          }}
         >
           <div>
             <div className="mb-10px font-medium">
@@ -136,22 +71,15 @@ export default async function Profile() {
               <p>다양한 오프라인 활동을</p>
               <p>제보해주세요!</p>
             </div>
-
-            <Link
-              className="text-12px text-slate-600"
-              href="mailto:moharu.site@gmail.com?subject=Activity Link&body=모하루에게 전시, 행사, 모임, 장소 등 다양한 오프라인 활동을 제보해주세요!"
-            >
-              moharu.site@gmail.com
-            </Link>
+            <p className="text-12px text-slate-600">moharu.site@gmail.com</p>
           </div>
-
           <Image
             src="/images/banners/banner_gift.svg"
             alt="메일"
             width={105}
             height={110}
           />
-        </div>
+        </a>
 
         <div className="text-14px">
           <p className="mb-20px">
@@ -179,7 +107,7 @@ export default async function Profile() {
               await signOut();
             }}
           >
-            <button type="submit" className="text-slate-500">
+            <button type="submit" className="mb-24px text-slate-500">
               로그아웃
             </button>
           </form>

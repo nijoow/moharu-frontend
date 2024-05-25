@@ -1,11 +1,9 @@
-import { getSession } from 'next-auth/react';
-
 interface FetchOptions extends RequestInit {
   headers?: HeadersInit;
 }
 
 export async function fetchWithToken(url: string, options: FetchOptions = {}) {
-  const session = await getSession();
+  // const session = await getSession();
 
   const headers = {
     'Content-Type': 'application/json',
@@ -23,5 +21,6 @@ export async function fetchWithToken(url: string, options: FetchOptions = {}) {
     throw new Error(error.message);
   }
 
+  // TODO: response로 리턴하도록 변경?
   return response.json();
 }

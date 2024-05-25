@@ -3,12 +3,12 @@
 import { ShareDialog } from '@/app/_components/dialog/share-dialog';
 import { cn } from '@/lib/utils';
 import { Activity } from '@/types/type';
-import { HeartIcon, ShareIcon } from 'lucide-react';
+import { ShareIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { LikeToast } from '../activity/like-toast';
-import HearFillIcon from '/public/images/icons/heart-fill.svg';
+import WishButton from '../activity/wish-button';
 
 interface HeaderProps {
   title?: string;
@@ -68,17 +68,11 @@ const Header: React.FC<HeaderProps> = ({
       <span className="absolute left-1/2 -translate-x-1/2">{title}</span>
       <div className="flex">
         {likeButton && (
-          <button
-            type="button"
+          <WishButton
+            isWish={isWish ?? false}
+            activityId={activity!.id}
             className="ml-auto mr-8px flex h-10 w-10 items-center justify-center rounded-full bg-white/60"
-            onClick={onClickLikeBtn}
-          >
-            {isWish ? (
-              <HearFillIcon width={24} height={24} className="fill-red-500" />
-            ) : (
-              <HeartIcon width={24} height={24} className="stroke-slate-900" />
-            )}
-          </button>
+          />
         )}
         {shareButton && activity && (
           <ShareDialog

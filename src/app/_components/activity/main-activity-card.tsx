@@ -6,11 +6,11 @@ import ActivityTypeBadge from '@/app/_components/activity/activity-type-badge';
 import { ShareDialog } from '@/app/_components/dialog/share-dialog';
 import { getActivityInfoByType } from '@/lib/utils';
 import { Activity } from '@/types/type';
-import { HeartIcon, ShareIcon } from 'lucide-react';
+import { ShareIcon } from 'lucide-react';
 import Link from 'next/link';
 import BackgroundImageWithPlaceholder from '../common/background-image-with-placeholder';
 import { LikeToast } from './like-toast';
-import HearFillIcon from '/public/images/icons/heart-fill.svg';
+import WishButton from './wish-button';
 interface MainActivityCardProps {
   activity: Activity;
 }
@@ -40,22 +40,11 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
             {/* TODO: 디자인 시스템 typograph 적용  */}
             <p className="text-20px font-bold">{activity.title}</p>
             <div className="flex items-start">
-              <button className="mr-16px" onClick={onClickLikeBtn}>
-                {/* TODO: HearFillIcon fill pink */}
-                {activity.isWish ? (
-                  <HearFillIcon
-                    width={24}
-                    height={24}
-                    className="fill-pink-500 stroke-pink-500"
-                  />
-                ) : (
-                  <HeartIcon
-                    width={24}
-                    height={24}
-                    className="stroke-slate-900"
-                  />
-                )}
-              </button>
+              <WishButton
+                className="mr-16px"
+                isWish={activity.isWish ?? false}
+                activityId={activity.id}
+              />
               <ShareDialog
                 activity={activity}
                 triggerComponent={
