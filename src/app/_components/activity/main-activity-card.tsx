@@ -4,11 +4,11 @@ import ActiveLocationInfo from '@/app/_components/activity/activity-location-inf
 import ActivityScheduleInfo from '@/app/_components/activity/activity-schedule-info';
 import ActivityTypeBadge from '@/app/_components/activity/activity-type-badge';
 import { ShareDialog } from '@/app/_components/dialog/share-dialog';
-import { useToast } from '@/components/ui/use-toast';
 import { getActivityInfoByType } from '@/lib/utils';
 import { Activity } from '@/types/type';
 import Link from 'next/link';
 import BackgroundImageWithPlaceholder from '../common/background-image-with-placeholder';
+import { LikeToast } from './like-toast';
 import HearFillIcon from '/public/images/icons/heart-fill.svg';
 import HeartIcon from '/public/images/icons/heart.svg';
 interface MainActivityCardProps {
@@ -16,13 +16,10 @@ interface MainActivityCardProps {
 }
 
 const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
-  const { toast } = useToast();
   const activityType = getActivityInfoByType(activity.type).type;
 
   const onClickLikeBtn = () => {
-    toast({
-      description: 'Like button clicked',
-    });
+    LikeToast({ isWish: activity.isWish ?? false, id: activity.id });
   };
 
   return (
@@ -45,7 +42,7 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
             <div className="flex">
               <button className="mr-16px" onClick={onClickLikeBtn}>
                 {/* TODO: HearFillIcon fill pink */}
-                {activity.wished ? (
+                {activity.isWish ? (
                   <HearFillIcon
                     width={24}
                     height={24}

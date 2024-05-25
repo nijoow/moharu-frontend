@@ -57,7 +57,7 @@ export default function Home() {
           (activity: Activity) => {
             return {
               ...activity,
-              wished: wishedActivityIds.includes(activity.id),
+              isWish: wishedActivityIds.includes(activity.id),
             };
           },
         );

@@ -1,26 +1,39 @@
 'use client';
 
+import { ShareDialog } from '@/app/_components/dialog/share-dialog';
 import { cn } from '@/lib/utils';
+import { Activity } from '@/types/type';
+import { HeartIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { HeaderShareDialog } from './share-dialog';
+import { LikeToast } from '../activity/like-toast';
 
 interface HeaderProps {
   title?: string;
   backButton?: boolean;
   shareButton?: boolean;
+  likeButton?: boolean;
   transparent?: boolean;
+  isWish: boolean;
+  activity: Activity;
 }
 
 const Header: React.FC<HeaderProps> = ({
   title,
   backButton = false,
   shareButton = false,
+  likeButton = false,
   transparent = false,
+  isWish,
+  activity,
 }) => {
   const router = useRouter();
   const [isScroll, setIsScroll] = useState(false);
+
+  const onClickLikeBtn = () => {
+    LikeToast({ isWish, id: activity.id });
+  };
 
   useEffect(() => {
     window.addEventListener('scroll', () => {
@@ -52,7 +65,18 @@ const Header: React.FC<HeaderProps> = ({
         </button>
       )}
       <span className="absolute left-1/2 -translate-x-1/2">{title}</span>
-      {shareButton && <HeaderShareDialog />}
+      <div className="flex">
+        {likeButton && (
+          <button
+            type="button"
+            className="ml-auto mr-8px flex h-10 w-10 items-center justify-center rounded-full bg-white/60"
+            onClick={onClickLikeBtn}
+          >
+            <HeartIcon width={24} height={24} className="stroke-slate-900" />
+          </button>
+        )}
+        {shareButton && <ShareDialog activity={activity} />}
+      </div>
     </header>
   );
 };

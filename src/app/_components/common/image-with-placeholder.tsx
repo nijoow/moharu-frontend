@@ -25,6 +25,7 @@ const ImageWithPlaceholder: React.FC<ImageWithPlaceholderProps> = ({
       height={height}
       alt={alt}
       className={className}
+      unoptimized={true}
     />
   );
 };

@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from '@/components/ui/use-toast';
 import { Activity } from '@/types/type';
-import ImageWithPlaceholder from '../common/image-with-placeholder';
+import BackgroundImageWithPlaceholder from '../common/background-image-with-placeholder';
 
 export function ShareDialog({ activity }: { activity: Activity }) {
   const moharuHomepageUrl = 'https://www.moharu.site';
@@ -23,11 +23,11 @@ export function ShareDialog({ activity }: { activity: Activity }) {
     try {
       await navigator.clipboard.writeText(activityUrl);
       toast({
-        description: 'Copy complete!',
+        description: '링크 복사 완료!',
       });
     } catch (err) {
       toast({
-        description: 'Failed to copy text',
+        description: '링크 복사 실패',
       });
     }
   };
@@ -35,7 +35,10 @@ export function ShareDialog({ activity }: { activity: Activity }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button>
+        <button
+          type="button"
+          className="ml-auto flex h-40px w-40px items-center justify-center rounded-full bg-white/60"
+        >
           <ShareIcon width={24} height={24} className="stroke-slate-900" />
         </button>
       </DialogTrigger>
@@ -48,12 +51,9 @@ export function ShareDialog({ activity }: { activity: Activity }) {
           </DialogDescription>
         </DialogHeader>
         <div className="flex w-full items-center gap-3">
-          <ImageWithPlaceholder
+          <BackgroundImageWithPlaceholder
             src={activity.coverImage}
-            width={80}
-            height={80}
-            alt="이미지"
-            className="flex-none overflow-hidden rounded-lg bg-slate-500"
+            className="h-20 w-20 flex-none rounded-lg bg-slate-500"
           />
           <div className="flex flex-auto flex-col">
             <h4 className="text-20px font-bold">모하루</h4>

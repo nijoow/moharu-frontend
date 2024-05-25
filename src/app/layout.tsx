@@ -22,12 +22,13 @@ export default function RootLayout({
   return (
     <AuthSessionProvider>
       <html lang="en" className="h-full">
-        <body className={`${pretendard.variable} font-pretendard h-full`}>
-          {/* TODO: shadow-md detail 화면에서의 처리 */}
-          <div className="relative mx-auto flex h-full max-w-md flex-col shadow-md">
-            {children}
+        <body className={`${pretendard.variable} h-full font-pretendard`}>
+          <div className="mx-auto h-full max-w-md shadow-md">
+            <div className="relative mx-auto flex h-full  flex-col">
+              {children}
+            </div>
+            <Toaster />
           </div>
-          <Toaster />
         </body>
       </html>
     </AuthSessionProvider>

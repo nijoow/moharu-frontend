@@ -13,7 +13,7 @@ export interface Activity {
   holidays: string;
   additionalInfo: AdditionalInfo[];
   link: string | null;
-  wished?: boolean;
+  isWish?: boolean;
 }
 
 interface AdditionalInfo {

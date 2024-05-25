@@ -130,7 +130,15 @@ export default function Profile() {
               <p>제보해주세요!</p>
             </div>
 
-            <p className="text-12px text-slate-600">moharu.site@gmail.com</p>
+            <button
+              className="text-12px text-slate-600"
+              type="button"
+              onClick={() => {
+                window.location.href = `mailto:moharu.site@gmail.com?subject=Activity Link&body=모하루에게 전시, 행사, 모임, 장소 등 다양한 오프라인 활동을 제보해주세요!`;
+              }}
+            >
+              moharu.site@gmail.com
+            </button>
           </div>
 
           <Image
