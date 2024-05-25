@@ -15,8 +15,8 @@ interface HeaderProps {
   shareButton?: boolean;
   likeButton?: boolean;
   transparent?: boolean;
-  isWish: boolean;
-  activity: Activity;
+  isWish?: boolean;
+  activity?: Activity;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({
   const [isScroll, setIsScroll] = useState(false);
 
   const onClickLikeBtn = () => {
-    LikeToast({ isWish, id: activity.id });
+    LikeToast({ isWish, id: activity?.id });
   };
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({
             <HeartIcon width={24} height={24} className="stroke-slate-900" />
           </button>
         )}
-        {shareButton && <ShareDialog activity={activity} />}
+        {shareButton && activity && <ShareDialog activity={activity} />}
       </div>
     </header>
   );

@@ -1,8 +1,8 @@
 import { toast } from '@/components/ui/use-toast';
 
 interface LikeToastProps {
-  isWish: boolean;
-  id: number;
+  isWish?: boolean;
+  id?: number;
 }
 
 export const LikeToast = ({ isWish, id }: LikeToastProps) => {
