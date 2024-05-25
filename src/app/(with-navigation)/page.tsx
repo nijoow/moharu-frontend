@@ -27,7 +27,7 @@ export default function Home() {
     if (!session && !searchParams.get('from')) {
       redirect('/auth/login');
     }
-    console.log(session && !session.user.mbti);
+
     if (session && !session.user.mbti) {
       redirect('/auth/signup/extra-required');
     }
@@ -65,15 +65,16 @@ export default function Home() {
       : '';
     const url = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/activities?categoryId=${selectedCategoryId}&selectedDate=${formattedDate}`;
 
-    fetchWithToken(url).then(data => {
-      const activitiesWithWishStatus: Activity[] = data.activities.map(
-        (activity: Activity) => {
-          return {
-            ...activity,
-            isWish: data.wishedActivityIds.includes(activity.id),
-          };
-        },
-      );
+    fetchWithToken(url)
+      .then(data => {
+        const activitiesWithWishStatus: Activity[] = data.activities.map(
+          (activity: Activity) => {
+            return {
+              ...activity,
+              isWish: data.wishedActivityIds.includes(activity.id),
+            };
+          },
+        );
         setActivities(activitiesWithWishStatus);
       })
       .catch(e => console.log(e));
