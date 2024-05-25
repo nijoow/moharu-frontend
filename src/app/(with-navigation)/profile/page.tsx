@@ -149,7 +149,23 @@ export default function Profile() {
           />
         </div>
         <div className="text-14px">
-          <p className="mb-20px">서비스 이용약관 / 개인정보처리방침</p>
+          <p className="mb-20px">
+            <a
+              href="https://www.notion.so/moharu/71758576975f40afb93271dd95f93d47"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              서비스 이용약관
+            </a>{' '}
+            /{' '}
+            <a
+              href="https://www.notion.so/moharu/9dbfac8563334017bc6950739a5d9c57"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              개인정보처리방침
+            </a>
+          </p>
           <p>버전 1.0.0</p>
           <Link href="/auth/login">
             <Button type="button">로그인 페이지</Button>

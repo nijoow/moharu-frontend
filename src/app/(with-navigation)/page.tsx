@@ -31,8 +31,7 @@ export default function Home() {
     // onClose();
   };
 
-  useEffect(() => {
-    // EXAMPLE: 클라이언트 컴포넌트에서 api 요청
+  const fetchCategories = () => {
     fetch(`/apis/activities-category`)
       .then(res => res.json())
       .then(data => {
@@ -44,29 +43,9 @@ export default function Home() {
         });
         setCategoryList(data);
       });
-  }, []);
+  };
 
-  useEffect(() => {
-    fetch('/apis/activities')
-      .then(response => response.json())
-      .then(data => {
-        // TODO: activitiesWithWishStatus 임시 값
-        // const wishedActivityIds = data.wishedActivityIds;
-        const wishedActivityIds = [11, 12, 13, 14];
-        const activitiesWithWishStatus: Activity[] = data.activities.map(
-          (activity: Activity) => {
-            return {
-              ...activity,
-              isWish: wishedActivityIds.includes(activity.id),
-            };
-          },
-        );
-
-        setActivities(activitiesWithWishStatus);
-      });
-  }, []);
-
-  useEffect(() => {
+  const fetchActivities = () => {
     const formattedDate = selectedDate
       ? moment(selectedDate).format('YYYY-MM-DD')
       : '';
@@ -75,9 +54,7 @@ export default function Home() {
     fetch(url)
       .then(response => response.json())
       .then(data => {
-        // TODO: activitiesWithWishStatus 임시 값
-        // const wishedActivityIds = data.wishedActivityIds;
-        const wishedActivityIds = [11, 12, 13, 14];
+        const wishedActivityIds = [11, 12, 13, 14]; // 임시 값
         const activitiesWithWishStatus: Activity[] = data.activities.map(
           (activity: Activity) => {
             return {
@@ -89,8 +66,15 @@ export default function Home() {
 
         setActivities(activitiesWithWishStatus);
       });
-  }, [selectedCategoryId, selectedDate]);
+  };
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    fetchActivities();
+  }, [selectedCategoryId, selectedDate]);
   return (
     <>
       {/* TODO: 날짜 포맷을 위한 moment 사용 여부 */}
