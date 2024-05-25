@@ -13,7 +13,7 @@ export interface Activity {
   holidays: string;
   additionalInfo: AdditionalInfo[];
   link: string | null;
-  wished: boolean;
+  wished?: boolean;
 }
 
 interface AdditionalInfo {
@@ -28,19 +28,26 @@ export interface Category {
   icon: string;
 }
 
-export interface User {
+export interface ProfilWishedActivity {
   id: number;
-  email: string;
+  activitiesId: number;
+  activity: {
+    id: number;
+    coverImage: string | null;
+    type: string;
+    activityCategory: {
+      name: string;
+    };
+  };
+}
+export interface UserProfile {
+  id: number;
   name: string;
-  profileImage: string;
+  profileImage: string | null;
   mbti: string;
   ageRange: string;
   gender: string;
   region: string;
-  socialType: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
 }
 
 export enum ACTIVITY_TYPE {

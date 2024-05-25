@@ -76,14 +76,15 @@ export default function ActivityPage() {
             <ActivityScheduleInfo activity={activity} />
           </div>
           <div className="border-b border-t border-[#E2E8F0] py-24px">
-            {activity.additionalInfo.map((info, index) => (
-              <div key={index} className="mb-12px flex">
-                <div className="label w-[70px] flex-shrink-0 font-medium">
-                  {info.label}
+            {activity.additionalInfo &&
+              activity.additionalInfo.map((info, index) => (
+                <div key={index} className="mb-12px flex">
+                  <div className="label w-[70px] flex-shrink-0 font-medium">
+                    {info.label}
+                  </div>
+                  <div>{info.value}</div>
                 </div>
-                <div>{info.value}</div>
-              </div>
-            ))}
+              ))}
           </div>
           {activity.link && (
             <a

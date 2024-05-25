@@ -1,5 +1,5 @@
 import BackgroundImageWithPlaceholder from '@/app/_components/common/background-image-with-placeholder';
-import { Activity } from '@/types/type';
+import { ProfilWishedActivity } from '@/types/type';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -9,7 +9,7 @@ const SectionList = ({
   totalCount,
 }: {
   title: string;
-  list: Activity[];
+  list: ProfilWishedActivity[];
   totalCount: number;
 }) => (
   <div>
@@ -24,9 +24,9 @@ const SectionList = ({
     </div>
     <div className="grid grid-cols-3 gap-x-3">
       {list.slice(0, 3).map(item => (
-        <Link href={`/activities/${item.id}`} key={item.id}>
+        <Link href={`/activities/${item.activity.id}`} key={item.activity.id}>
           <BackgroundImageWithPlaceholder
-            src={item.coverImage}
+            src={item.activity.coverImage}
             className="h-[140px] w-full rounded-[12px]"
           />
         </Link>

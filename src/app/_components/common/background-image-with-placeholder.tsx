@@ -1,5 +1,5 @@
 interface BackgroundImageWithPlaceholderProps {
-  src: string | null;
+  src: string | null | undefined;
   className: string;
 }
 

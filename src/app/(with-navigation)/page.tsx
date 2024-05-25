@@ -2,6 +2,7 @@
 
 import MainActivityCard from '@/app/_components/activity/main-activity-card';
 import CategoryBar from '@/app/_components/category-bar/category-bar';
+import Footer from '@/app/_components/footer/footer';
 import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
@@ -16,39 +17,10 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-const sampleCategoryList = [
-  {
-    id: '',
-    name: '전체/추천',
-    description: '예술과 관련된 내용',
-    icon: 'list',
-  },
-  {
-    id: 1,
-    name: '예술',
-    description: '예술과 관련된 내용',
-    icon: 'brush',
-  },
-  {
-    id: 2,
-    name: '책',
-    description: '독서와 관련된 내용',
-    icon: 'book-open',
-  },
-
-  {
-    id: 3,
-    name: '커리어',
-    description: '영화와 관련된 내용',
-    icon: 'bar-chart-4',
-  },
-];
-
 export default function Home() {
   const { data: session } = useSession();
 
-  const [categoryList, setCategoryList] =
-    useState<Category[]>(sampleCategoryList);
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
@@ -59,20 +31,20 @@ export default function Home() {
     // onClose();
   };
 
-  // useEffect(() => {
-  //   // EXAMPLE: 클라이언트 컴포넌트에서 api 요청
-  //   fetch(`/apis/activities-category`)
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       data.unshift({
-  //         id: '',
-  //         name: '전체',
-  //         description: '전체 내용',
-  //         icon: 'list',
-  //       });
-  //       setCategoryList(data);
-  //     });
-  // }, []);
+  useEffect(() => {
+    // EXAMPLE: 클라이언트 컴포넌트에서 api 요청
+    fetch(`/apis/activities-category`)
+      .then(res => res.json())
+      .then(data => {
+        data.unshift({
+          id: '',
+          name: '전체',
+          description: '전체 내용',
+          icon: 'list',
+        });
+        setCategoryList(data);
+      });
+  }, []);
 
   useEffect(() => {
     fetch('/apis/activities')
@@ -167,13 +139,7 @@ export default function Home() {
           ))
         : null}
       {/* TODO: footer 컴포넌트 분리 및 UI, link 작업 */}
-      <footer>
-        <p>모두에게 선물같은 하루, 모하루</p>
-        <p>
-          모하루(Moharu)는 모하루기버즈팀(Team Moharu Givers)이 비사이드
-          포텐데이405에 참여하여 제작하게 된 사이드프로젝트입니다.
-        </p>
-      </footer>
+      <Footer />
     </>
   );
 }
