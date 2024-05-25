@@ -16,8 +16,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { useRecoilState } from 'recoil';
 import { z } from 'zod';
-import { useSignUpContext } from '../_context/useSignUpContext';
+import { signUpInformationState } from '../_recoil/atom';
 
 const phoneRegex = /^01([0|1|6|7|8|9])([0-9]{4})([0-9]{4})$/;
 
@@ -54,17 +55,32 @@ const mbtiTypes: {
 export default function SignUpExtraRequiredPage() {
   const router = useRouter();
   const { data: session } = useSession();
-
-  const { signUpInfo, setSignUpInfo } = useSignUpContext();
+  const [signUpInfo, setSignUpInfo] = useRecoilState(signUpInformationState);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
+    defaultValues: {
+      telephone: signUpInfo.telephone,
+      mbti: {
+        EI: signUpInfo.mbti?.charAt(0) as 'E' | 'I',
+        SN: signUpInfo.mbti?.charAt(1) as 'S' | 'N',
+        TF: signUpInfo.mbti?.charAt(2) as 'T' | 'F',
+        JP: signUpInfo.mbti?.charAt(3) as 'J' | 'P',
+      },
+    },
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { telephone, mbti } = values;
     if (session) {
-      setSignUpInfo(prev => ({ ...prev }));
+      setSignUpInfo({
+        ...signUpInfo,
+        email: session.user.email,
+        profileImage: session.user.profileImage,
+        name: session.user.name,
+        socialType: session.user.socialType,
+        socialId: session.user.socialId,
+      });
     }
     setSignUpInfo({
       ...signUpInfo,

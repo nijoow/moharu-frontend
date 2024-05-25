@@ -14,8 +14,9 @@ import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { useRecoilState } from 'recoil';
 import { z } from 'zod';
-import { useSignUpContext } from '../_context/useSignUpContext';
+import { signUpInformationState } from '../_recoil/atom';
 
 const formSchema = z
   .object({
@@ -39,7 +40,7 @@ const formSchema = z
 
 export default function SignUpPasswordPage() {
   const router = useRouter();
-  const { signUpInfo, setSignUpInfo } = useSignUpContext();
+  const [signUpInfo, setSignUpInfo] = useRecoilState(signUpInformationState);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
@@ -48,7 +49,7 @@ export default function SignUpPasswordPage() {
   const passwordValue = form.watch('password');
   const confirmPasswordValue = form.watch('confirmPassword');
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = () => {
     setSignUpInfo({ ...signUpInfo, password: passwordValue });
     router.replace('/auth/signup/extra-required');
   };

@@ -1,6 +1,5 @@
 import Header from '@/app/_components/header/header';
 import SignUpProgress from './_components/signup-progress';
-import { SignUpProvider } from './_context/signup-context';
 
 export default function Layout({
   children,
@@ -14,7 +13,7 @@ export default function Layout({
         <span className="font-medium">회원가입을 진행합니다.</span>
       </div>
       <SignUpProgress />
-      <SignUpProvider>{children}</SignUpProvider>
+      {children}
     </>
   );
 }

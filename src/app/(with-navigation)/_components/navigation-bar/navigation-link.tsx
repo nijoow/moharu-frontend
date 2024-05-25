@@ -1,5 +1,6 @@
 import { NeedLoginDialog } from '@/app/_components/dialog/need-login-dialog';
 import { cn } from '@/lib/utils';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 export const NavigationLinkItem = ({
@@ -44,12 +45,11 @@ const NavigationLink = ({
   active: boolean;
   isLoginNeeded: boolean;
 }) => {
-  // TODO: 임시 값, 실제 로그인 여부 적용 필요
-  const isLogin = true;
+  const { data: session } = useSession();
 
   return (
     <>
-      {isLoginNeeded && !isLogin ? (
+      {isLoginNeeded && !session ? (
         <NeedLoginDialog Icon={Icon} text={text} active={active} />
       ) : (
         <Link

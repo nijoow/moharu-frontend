@@ -11,13 +11,15 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import { z } from 'zod';
 import Timer from '../_components/timer';
-import { useSignUpContext } from '../_context/useSignUpContext';
+import { signUpInformationState } from '../_recoil/atom';
 
 const formSchema = z.object({
   email: z.string().email({ message: '올바른 이메일 형식이 아닙니다.' }),
@@ -26,7 +28,9 @@ const formSchema = z.object({
 
 export default function SignupEmailPage() {
   const router = useRouter();
-  const { signUpInfo, setSignUpInfo } = useSignUpContext();
+  const [signUpInfo, setSignUpInfo] = useRecoilState(signUpInformationState);
+  const resetSignInfo = useResetRecoilState(signUpInformationState);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
@@ -40,20 +44,50 @@ export default function SignupEmailPage() {
   const emailValue = form.watch('email');
   const authenticationCode = form.watch('authenticationCode');
 
-  const RequestEmailAuthentication = () => {
-    fetch('https://api.moharu.site/auth/send-verify-email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: emailValue,
-    });
-    setTime(60 * 5);
+  useEffect(() => {
+    resetSignInfo();
+  }, []);
+
+  const RequestEmailAuthentication = async () => {
+    try {
+      const response = await fetch(
+        'https://api.moharu.site/auth/send-verify-email',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: emailValue }),
+        },
+      );
+      if (response.ok) {
+        toast({
+          description: '인증 메일이 요청되었습니다!',
+        });
+        setTime(60 * 5);
+      }
+    } catch (e) {
+      toast({
+        description: '메일 전송에 실패하였습니다!',
+      });
+    }
   };
 
-  const handleClickSendAuthenticationCodeButton = () => {
-    RequestEmailAuthentication();
-    setEmailAuthenticationCodeRequested(true);
+  const handleClickSendAuthenticationCodeButton = async () => {
+    try {
+      const response = await fetch('https://api.moharu.site/auth/check-email');
+      const data = await response.json();
+
+      if (data.exists) {
+        throw new Error('이미 가입된 이메일입니다.');
+      }
+      await RequestEmailAuthentication();
+      setEmailAuthenticationCodeRequested(true);
+    } catch (e) {
+      toast({
+        description: (e as Error).message ?? '메일 전송에 실패하였습니다!',
+      });
+    }
   };
 
   const handleClickAuthenticationButton = async () => {
@@ -140,7 +174,8 @@ export default function SignupEmailPage() {
           className="mt-auto"
           type="button"
           disabled={!!form.formState.errors.email || !emailValue}
-          onClick={handleClickSendAuthenticationCodeButton}
+          // onClick={handleClickSendAuthenticationCodeButton}
+          onClick={() => router.replace('/auth/signup/password')}
         >
           인증코드 전송
         </Button>

@@ -9,6 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { toast } from '@/components/ui/use-toast';
 import { fetchWithToken } from '@/lib/fetch';
 import { Activity, Category } from '@/types/type';
 import { format } from 'date-fns';
@@ -22,6 +23,15 @@ import { useEffect, useState } from 'react';
 export default function Home() {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (searchParams.get('from') === 'signup') {
+      toast({ description: '회원가입이 완료되었습니다!' });
+      router.replace('/');
+    }
+  }, []);
+
 
   // useEffect(() => {
   //   if (!session && !searchParams.get('from')) {

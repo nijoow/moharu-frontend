@@ -14,9 +14,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRecoilState } from 'recoil';
 import { z } from 'zod';
-import { useSignUpContext } from '../_context/useSignUpContext';
+import { signUpInformationState } from '../_recoil/atom';
 
 const formSchema = z.object({
   name: z.string().optional(),
@@ -74,36 +76,41 @@ const ageRangeButtons: {
 ];
 
 const regionButtons: {
-  value: 'Seoul' | 'Gyeonggi' | null;
+  value: 'Seoul' | 'Gyeonggi' | 'etc';
   buttonText: string;
 }[] = [
   { value: 'Seoul', buttonText: '서울' },
   { value: 'Gyeonggi', buttonText: '경기' },
-  { value: null, buttonText: '선택안함' },
+  { value: 'etc', buttonText: '선택안함' },
 ];
 
 export default function SignUpExtraOptionalPage() {
   const { data: session } = useSession();
   const router = useRouter();
-  const { signUpInfo, setSignUpInfo } = useSignUpContext();
+  const [signUpInfo, setSignUpInfo] = useRecoilState(signUpInformationState);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
     defaultValues: {
-      name: session?.user?.name || '',
-      profileImage:
-        session?.user?.profileImage ||
-        '/images/logo/Logo_Image_Main_Moharu.png',
+      name: session?.user?.name || signUpInfo.name || '',
+      profileImage: '/images/logo/Logo_Image_Main_Moharu.png',
+      gender: signUpInfo.gender,
+      ageRange: signUpInfo.ageRange,
+      region: signUpInfo.region,
     },
   });
-
   const profileImageUrl = form.watch('profileImage');
+
+  useEffect(() => {
+    if (session) form.setValue('profileImage', session.user.profileImage);
+  }, [session]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const response = await fetch('https://api.moharu.site/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...signUpInfo, ...values }),
+      body: JSON.stringify({ ...signUpInfo }),
     });
     if (response.status === 201) {
       router.push('/?from=signup');
@@ -121,6 +128,7 @@ export default function SignUpExtraOptionalPage() {
           alt="프로필 사진"
           width={100}
           height={100}
+          className="rounded-lg"
         />
 
         <FormField
@@ -132,12 +140,12 @@ export default function SignUpExtraOptionalPage() {
               <FormControl>
                 <Input
                   type="text"
-                  defaultValue={'이름'}
                   {...field}
                   onChange={e => {
                     form.setValue('name', e.target.value, {
                       shouldValidate: true,
                     });
+                    setSignUpInfo({ ...signUpInfo, name: e.target.value });
                   }}
                 />
               </FormControl>
@@ -156,6 +164,7 @@ export default function SignUpExtraOptionalPage() {
                 form.setValue('gender', value, {
                   shouldValidate: true,
                 });
+                setSignUpInfo({ ...signUpInfo, gender: value });
               }}
               className="flex h-fit items-center gap-3"
             >
@@ -175,6 +184,7 @@ export default function SignUpExtraOptionalPage() {
                 form.setValue('ageRange', value, {
                   shouldValidate: true,
                 });
+                setSignUpInfo({ ...signUpInfo, ageRange: value });
               }}
               className="flex h-fit items-center gap-3"
             >
@@ -194,6 +204,7 @@ export default function SignUpExtraOptionalPage() {
                 form.setValue('region', value, {
                   shouldValidate: true,
                 });
+                setSignUpInfo({ ...signUpInfo, region: value });
               }}
               className="flex h-fit items-center gap-3"
             >

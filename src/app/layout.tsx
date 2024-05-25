@@ -1,5 +1,6 @@
 import { Toaster } from '@/components/ui/toaster';
 import { pretendard } from '@/font/font';
+import RecoilProvider from '@/lib/recoil';
 import type { Metadata } from 'next';
 import React from 'react';
 import AuthSessionProvider from './_context/AuthSessionProvider';
@@ -18,16 +19,18 @@ export default function RootLayout({
 }>) {
   return (
     <AuthSessionProvider>
-      <html lang="en" className="h-full">
-        <body className={`${pretendard.variable} h-full font-pretendard`}>
-          <div className="mx-auto h-full max-w-md shadow-md">
-            <div className="relative mx-auto flex h-full  flex-col">
-              {children}
+      <RecoilProvider>
+        <html lang="en" className="h-full">
+          <body className={`${pretendard.variable} font-pretendard h-full`}>
+            <div className="mx-auto h-full max-w-md shadow-md">
+              <div className="relative mx-auto flex h-full  flex-col">
+                {children}
+              </div>
+              <Toaster />
             </div>
-            <Toaster />
-          </div>
-        </body>
-      </html>
+          </body>
+        </html>
+      </RecoilProvider>
     </AuthSessionProvider>
   );
 }
