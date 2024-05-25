@@ -82,6 +82,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       user.gender = data.user.gender;
       user.region = data.user.region;
       user.socialType = data.user.socialType;
+      user.socialId = data.user.socialId;
       user.accessToken = data.accessToken;
 
       return true;
