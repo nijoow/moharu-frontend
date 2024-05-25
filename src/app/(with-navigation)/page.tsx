@@ -32,7 +32,7 @@ export default function Home() {
   };
 
   const fetchCategories = () => {
-    fetch(`/apis/activities-category`)
+    fetch(`https://api.moharu.site/activities-category`)
       .then(res => res.json())
       .then(data => {
         data.unshift({
@@ -49,7 +49,7 @@ export default function Home() {
     const formattedDate = selectedDate
       ? moment(selectedDate).format('YYYY-MM-DD')
       : '';
-    const url = `/apis/activities?categoryId=${selectedCategoryId}&selectedDate=${formattedDate}`;
+    const url = `https://api.moharu.site/activities?categoryId=${selectedCategoryId}&selectedDate=${formattedDate}`;
 
     fetch(url)
       .then(response => response.json())

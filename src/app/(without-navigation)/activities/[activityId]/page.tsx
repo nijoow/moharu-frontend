@@ -20,7 +20,7 @@ export default function ActivityPage() {
   };
 
   useEffect(() => {
-    fetch(`/apis/activities/${params.activityId}`)
+    fetch(`https://api.moharu.site/activities/${params.activityId}`)
       .then(response => response.json())
       .then(data =>
         setActivity({

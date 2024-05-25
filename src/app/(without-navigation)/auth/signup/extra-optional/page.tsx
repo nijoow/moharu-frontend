@@ -100,7 +100,7 @@ export default function SignUpExtraOptionalPage() {
   const profileImageUrl = form.watch('profileImage');
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = await fetch('/apis/auth/register', {
+    const response = await fetch('https://api.moharu.site/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...signUpInfo, ...values }),

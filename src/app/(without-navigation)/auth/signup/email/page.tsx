@@ -41,12 +41,12 @@ export default function SignupEmailPage() {
   const authenticationCode = form.watch('authenticationCode');
 
   const RequestEmailAuthentication = () => {
-    fetch('/apis/user/email', {
+    fetch('https://api.moharu.site/auth/send-verify-email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: emailValue }),
+      body: emailValue,
     });
     setTime(60 * 5);
   };
@@ -57,7 +57,7 @@ export default function SignupEmailPage() {
   };
 
   const handleClickAuthenticationButton = async () => {
-    const response = await fetch('/apis/user/email/verify', {
+    const response = await fetch('https://api.moharu.site/auth/verify-email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
