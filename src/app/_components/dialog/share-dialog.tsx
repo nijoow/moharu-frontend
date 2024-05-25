@@ -1,5 +1,3 @@
-import { ShareIcon } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -13,9 +11,16 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from '@/components/ui/use-toast';
 import { Activity } from '@/types/type';
+import React from 'react';
 import BackgroundImageWithPlaceholder from '../common/background-image-with-placeholder';
 
-export function ShareDialog({ activity }: { activity: Activity }) {
+export function ShareDialog({
+  activity,
+  triggerComponent,
+}: {
+  activity: Activity;
+  triggerComponent: React.ReactNode;
+}) {
   const moharuHomepageUrl = 'https://www.moharu.site';
   const activityUrl = `${moharuHomepageUrl}/activities/${activity.id}`;
 
@@ -34,18 +39,10 @@ export function ShareDialog({ activity }: { activity: Activity }) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <button
-          type="button"
-          className="ml-auto flex h-40px w-40px items-center justify-center rounded-full bg-white/60"
-        >
-          <ShareIcon width={24} height={24} className="stroke-slate-900" />
-        </button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{triggerComponent}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogIcon icon="link" />
-
           <DialogDescription>
             모하루의 추천 활동을 다른 사람과 공유해보세요!
           </DialogDescription>

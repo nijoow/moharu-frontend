@@ -6,6 +6,7 @@ import ActivityTypeBadge from '@/app/_components/activity/activity-type-badge';
 import BackgroundImageWithPlaceholder from '@/app/_components/common/background-image-with-placeholder';
 import Header from '@/app/_components/header/header';
 import { Button } from '@/components/ui/button';
+import { fetchWithToken } from '@/lib/fetch';
 import { getActivityInfoByType } from '@/lib/utils';
 import { Activity } from '@/types/type';
 import { useParams } from 'next/navigation';
@@ -20,14 +21,14 @@ export default function ActivityPage() {
   };
 
   useEffect(() => {
-    fetch(`https://api.moharu.site/activities/${params.activityId}`)
-      .then(response => response.json())
-      .then(data =>
-        setActivity({
-          ...data.activity,
-          isWish: data.isWish,
-        }),
-      );
+    fetchWithToken(
+      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/activities/${params.activityId}`,
+    ).then(data =>
+      setActivity({
+        ...data.activity,
+        isWish: data.isWish,
+      }),
+    );
   }, []);
 
   if (!activity) return null;
@@ -48,7 +49,7 @@ export default function ActivityPage() {
           src={activity.coverImage}
           className="h-[460px]"
         />
-        <div className="px-24px py-20px">
+        <div className="bg-white px-24px py-20px">
           <div className="flex-col  pb-24px">
             <ActivityTypeBadge type={activityType} />
             <h4 className="my-8px text-20px font-bold">{activity.title}</h4>

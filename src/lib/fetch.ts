@@ -10,7 +10,7 @@ export async function fetchWithToken(url: string, options: FetchOptions = {}) {
   const headers = {
     'Content-Type': 'application/json',
     ...options.headers,
-    Authorization: `Bearer ${session?.accessToken ?? ''}`,
+    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcsImVtYWlsIjoidXNlckBleGFtcGxlLmNvbSIsImlhdCI6MTcxNjYyOTgxOX0.e6UCPN93rriCFtRVofhkYBIV1DYbCcK-0UqH-RWKXGc`,
   };
 
   const response = await fetch(url, {

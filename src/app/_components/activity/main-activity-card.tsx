@@ -6,11 +6,11 @@ import ActivityTypeBadge from '@/app/_components/activity/activity-type-badge';
 import { ShareDialog } from '@/app/_components/dialog/share-dialog';
 import { getActivityInfoByType } from '@/lib/utils';
 import { Activity } from '@/types/type';
+import { HeartIcon, ShareIcon } from 'lucide-react';
 import Link from 'next/link';
 import BackgroundImageWithPlaceholder from '../common/background-image-with-placeholder';
 import { LikeToast } from './like-toast';
 import HearFillIcon from '/public/images/icons/heart-fill.svg';
-import HeartIcon from '/public/images/icons/heart.svg';
 interface MainActivityCardProps {
   activity: Activity;
 }
@@ -24,7 +24,7 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
 
   return (
     <>
-      <div className="p-24px">
+      <div className="bg-white p-24px">
         <Link href={`/activities/${activity.id}`} className="relative mb-20px">
           <BackgroundImageWithPlaceholder
             src={activity.coverImage}
@@ -39,14 +39,14 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
           <div className="mb-8px flex justify-between">
             {/* TODO: 디자인 시스템 typograph 적용  */}
             <p className="text-20px font-bold">{activity.title}</p>
-            <div className="flex">
+            <div className="flex items-start">
               <button className="mr-16px" onClick={onClickLikeBtn}>
                 {/* TODO: HearFillIcon fill pink */}
                 {activity.isWish ? (
                   <HearFillIcon
                     width={24}
                     height={24}
-                    className="fill-red-500"
+                    className="fill-pink-500 stroke-pink-500"
                   />
                 ) : (
                   <HeartIcon
@@ -56,7 +56,21 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
                   />
                 )}
               </button>
-              <ShareDialog activity={activity} />
+              <ShareDialog
+                activity={activity}
+                triggerComponent={
+                  <button
+                    type="button"
+                    className="flex items-center justify-center rounded-full bg-white/60"
+                  >
+                    <ShareIcon
+                      width={24}
+                      height={24}
+                      className="stroke-slate-900"
+                    />
+                  </button>
+                }
+              />
             </div>
           </div>
           <ActiveLocationInfo

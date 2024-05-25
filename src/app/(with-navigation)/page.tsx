@@ -9,6 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { fetchWithToken } from '@/lib/fetch';
 import { Activity, Category } from '@/types/type';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -32,7 +33,7 @@ export default function Home() {
   };
 
   const fetchCategories = () => {
-    fetch(`https://api.moharu.site/activities-category`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/activities-category`)
       .then(res => res.json())
       .then(data => {
         data.unshift({
@@ -49,23 +50,20 @@ export default function Home() {
     const formattedDate = selectedDate
       ? moment(selectedDate).format('YYYY-MM-DD')
       : '';
-    const url = `https://api.moharu.site/activities?categoryId=${selectedCategoryId}&selectedDate=${formattedDate}`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/activities?categoryId=${selectedCategoryId}&selectedDate=${formattedDate}`;
 
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        const wishedActivityIds = [11, 12, 13, 14]; // 임시 값
-        const activitiesWithWishStatus: Activity[] = data.activities.map(
-          (activity: Activity) => {
-            return {
-              ...activity,
-              wished: wishedActivityIds.includes(activity.id),
-            };
-          },
-        );
+    fetchWithToken(url).then(data => {
+      const activitiesWithWishStatus: Activity[] = data.activities.map(
+        (activity: Activity) => {
+          return {
+            ...activity,
+            isWish: data.wishedActivityIds.includes(activity.id),
+          };
+        },
+      );
 
-        setActivities(activitiesWithWishStatus);
-      });
+      setActivities(activitiesWithWishStatus);
+    });
   };
 
   useEffect(() => {
