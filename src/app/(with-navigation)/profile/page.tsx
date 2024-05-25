@@ -1,19 +1,22 @@
 import BackgroundImageWithPlaceholder from '@/app/_components/common/background-image-with-placeholder';
 import { DevelopmentPendingDialog } from '@/app/_components/dialog/development-pending-dialog';
 import TitleHeader from '@/app/_components/header/title-header';
-import { signOut } from '@/auth';
-import { fetchWithToken } from '@/lib/fetch';
+import { auth, signOut } from '@/auth';
+import { serverSideFetchWithToken } from '@/lib/fetch';
 import Image from 'next/image';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import DoughnutChart from './_component/doughnut-chart';
 import SectionList from './_component/section-list';
 
 export default async function Profile() {
-  // const session = await auth();
+  const session = await auth();
 
-  // if (!session) redirect('/auth/login');
+  if (!session) redirect('/auth/login');
 
-  const response = await fetchWithToken('https://api.moharu.site/user');
+  const response = await serverSideFetchWithToken(
+    'https://api.moharu.site/user',
+  );
   const data = await response.json();
 
   const userProfile = data.userProfile;
@@ -106,7 +109,9 @@ export default async function Profile() {
           <form
             action={async () => {
               'use server';
-              await signOut();
+              await signOut({
+                redirectTo: '/auth/login',
+              });
             }}
           >
             <button type="submit" className="mb-24px text-slate-500">

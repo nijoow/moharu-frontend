@@ -17,12 +17,13 @@ import { ko } from 'date-fns/locale';
 import moment from 'moment';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
+import { redirect, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     if (searchParams.get('from') === 'signup') {
@@ -30,15 +31,15 @@ export default function Home() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (!session && !searchParams.get('from')) {
-  //     redirect('/auth/login');
-  //   }
+  useEffect(() => {
+    if (!session && !searchParams.get('from')) {
+      redirect('/auth/login');
+    }
 
-  //   if (session && !session.user.mbti) {
-  //     redirect('/auth/signup/extra-required');
-  //   }
-  // }, [session]);
+    if (session && !session.user.mbti) {
+      redirect('/auth/signup/extra-required');
+    }
+  }, [session]);
 
   const [open, setOpen] = useState(false);
   const [categoryList, setCategoryList] = useState<Category[]>([]);

@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { CredentialsSignin } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import Kakao from 'next-auth/providers/kakao';
@@ -13,13 +13,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: {},
       },
       authorize: async credentials => {
-        let user = null;
-
-        const {
-          email,
-
-          password,
-        } = credentials;
+        const { email, password } = credentials;
 
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/local/login`,
@@ -36,8 +30,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         );
         const data = await response.json();
 
-        if (!data) throw new Error('User not found.');
-
+        if (!response.ok) {
+          throw new CredentialsSignin();
+        }
+        const user = {
+          ...data.user,
+          accessToken: data.accessToken,
+        };
         return user;
       },
     }),
@@ -49,7 +48,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: 'jwt',
   },
   callbacks: {
-    async signIn({ account, profile, user }) {
+    async signIn({ account, user }) {
+      if (account?.provider === 'credentials') {
+        return true;
+      }
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/${account?.provider}/login`,
         {
@@ -66,6 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }),
         },
       );
+
       const data = await response.json();
 
       user.id = data.user.id;
@@ -74,12 +78,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       user.profileImage = data.user.profileImage;
       user.telephone = data.user.telephone;
       user.mbti = data.user.mbti;
-      user.ageRange = data.user.age;
+      user.ageRange = data.user.ageRange;
       user.gender = data.user.gender;
       user.region = data.user.region;
-      user.socialId = data.user.socialId;
       user.socialType = data.user.socialType;
       user.accessToken = data.accessToken;
+
       return true;
     },
     async jwt({ token, user }) {

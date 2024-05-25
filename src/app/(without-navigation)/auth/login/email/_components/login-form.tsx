@@ -10,8 +10,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -21,12 +22,24 @@ const formSchema = z.object({
 
 const LoginForm = () => {
   const router = useRouter();
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
   });
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+
+  const onSubmit: SubmitHandler<
+    z.infer<typeof formSchema>
+  > = async formData => {
+    const response = await signIn('credentials', {
+      ...formData,
+      redirect: false,
+    });
+    if (response?.error === 'CredentialsSignin') {
+      return form.setError('password', {
+        message: '이메일 또는 비밀번호가 일치하지 않습니다.',
+      });
+    }
+
     router.push('/');
   };
 

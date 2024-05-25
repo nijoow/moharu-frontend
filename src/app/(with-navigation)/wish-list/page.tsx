@@ -27,6 +27,9 @@ export default function WishListPage() {
         if (value === '') {
           setTotalCount(data.totalCount);
         }
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
 

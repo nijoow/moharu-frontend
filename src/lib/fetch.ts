@@ -1,14 +1,17 @@
+import { auth } from '@/auth';
+import { getSession } from 'next-auth/react';
+
 interface FetchOptions extends RequestInit {
   headers?: HeadersInit;
 }
 
 export async function fetchWithToken(url: string, options: FetchOptions = {}) {
-  // const session = await getSession();
+  const session = await getSession();
 
   const headers = {
     'Content-Type': 'application/json',
     ...options.headers,
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcsImVtYWlsIjoidXNlckBleGFtcGxlLmNvbSIsImlhdCI6MTcxNjYyOTgxOX0.e6UCPN93rriCFtRVofhkYBIV1DYbCcK-0UqH-RWKXGc`,
+    Authorization: `Bearer ${session?.user.accessToken}`,
   };
 
   const response = await fetch(url, {
@@ -23,4 +26,22 @@ export async function fetchWithToken(url: string, options: FetchOptions = {}) {
 
   // TODO: response로 리턴하도록 변경?
   return response;
+}
+
+export async function serverSideFetchWithToken(
+  url: string,
+  options: FetchOptions = {},
+) {
+  const session = await auth();
+
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+    Authorization: `Bearer ${session?.user.accessToken}`,
+  };
+
+  return fetch(url, {
+    ...options,
+    headers,
+  });
 }

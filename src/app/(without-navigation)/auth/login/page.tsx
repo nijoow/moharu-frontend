@@ -1,9 +1,14 @@
-import { signIn } from '@/auth';
+import { auth, signIn } from '@/auth';
 import { Button } from '@/components/ui/button';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await auth();
+  if (session) redirect('/');
+
   return (
     <div className="flex h-full w-full flex-col items-center bg-black px-16 pb-24">
       <Image
@@ -77,7 +82,13 @@ export default function LoginPage() {
         로그인함으로써 Moharu의 정책 및 약관에 동의합니다.
       </span>
       <span className="text-11px text-slate-400">
-        이용약관/개인정보 처리방침
+        <Link href="https://www.notion.so/moharu/71758576975f40afb93271dd95f93d47">
+          이용약관
+        </Link>{' '}
+        /{' '}
+        <Link href="https://www.notion.so/moharu/9dbfac8563334017bc6950739a5d9c57">
+          개인정보 처리방침
+        </Link>
       </span>
     </div>
   );

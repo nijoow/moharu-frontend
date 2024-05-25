@@ -62,10 +62,10 @@ export default function SignUpExtraRequiredPage() {
     defaultValues: {
       telephone: signUpInfo.telephone,
       mbti: {
-        EI: signUpInfo.mbti?.charAt(0) as 'E' | 'I',
-        SN: signUpInfo.mbti?.charAt(1) as 'S' | 'N',
-        TF: signUpInfo.mbti?.charAt(2) as 'T' | 'F',
-        JP: signUpInfo.mbti?.charAt(3) as 'J' | 'P',
+        EI: (signUpInfo.mbti?.charAt(0) as 'E' | 'I') || 'I',
+        SN: (signUpInfo.mbti?.charAt(1) as 'S' | 'N') || 'N',
+        TF: (signUpInfo.mbti?.charAt(2) as 'T' | 'F') || 'F',
+        JP: (signUpInfo.mbti?.charAt(3) as 'J' | 'P') || 'P',
       },
     },
   });
@@ -81,13 +81,14 @@ export default function SignUpExtraRequiredPage() {
         socialType: session.user.socialType,
         socialId: session.user.socialId,
       });
+    } else {
+      setSignUpInfo({
+        ...signUpInfo,
+        telephone,
+        mbti: mbti.EI + mbti.SN + mbti.TF + mbti.JP,
+        socialType: 'local',
+      });
     }
-    setSignUpInfo({
-      ...signUpInfo,
-      telephone,
-      mbti: mbti.EI + mbti.SN + mbti.TF + mbti.JP,
-      socialType: session?.user?.socialType || 'local',
-    });
     router.replace('/auth/signup/extra-optional');
   };
 
