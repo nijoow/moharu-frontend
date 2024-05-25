@@ -80,6 +80,8 @@ export default function SignUpExtraRequiredPage() {
         name: session.user.name,
         socialType: session.user.socialType,
         socialId: session.user.socialId,
+        telephone,
+        mbti: mbti.EI + mbti.SN + mbti.TF + mbti.JP,
       });
     } else {
       setSignUpInfo({
