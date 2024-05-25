@@ -1,12 +1,9 @@
 import { Toaster } from '@/components/ui/toaster';
 import { pretendard } from '@/font/font';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import React from 'react';
 import AuthSessionProvider from './_context/AuthSessionProvider';
 import './globals.css';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: '모하루',

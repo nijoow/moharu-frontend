@@ -1,14 +1,11 @@
-'use client';
-
 import BackgroundImageWithPlaceholder from '@/app/_components/common/background-image-with-placeholder';
 import { DevelopmentPendingDialog } from '@/app/_components/dialog/development-pending-dialog';
 import TitleHeader from '@/app/_components/header/title-header';
-import { Button } from '@/components/ui/button';
-import { ProfilWishedActivity, UserProfile } from '@/types/type';
-import { signOut } from 'next-auth/react';
+import { auth, signOut } from '@/auth';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { redirect } from 'next/navigation';
+import DoughnutChart from './_component/doughnut-chart';
 import SectionList from './_component/section-list';
 
 const data = {
@@ -67,15 +64,15 @@ const data = {
     책: 1,
   },
 };
-export default function Profile() {
-  const [userProfile, setUserProfile] = useState<UserProfile>(data.userProfile);
-  const [activityWishes, setActivityWishes] = useState<ProfilWishedActivity[]>(
-    data.activityWishes,
-  );
-  ``;
-  const [wishTotalCount, setWishTotalCount] = useState<number>(
-    data.wishTotalCount,
-  );
+export default async function Profile() {
+  const session = await auth();
+
+  if (!session) redirect('/auth/login');
+
+  const activityWishes = data.activityWishes;
+
+  const wishTotalCount = data.wishTotalCount;
+
   // const session = await auth();
   // console.log(session);
 
@@ -93,28 +90,33 @@ export default function Profile() {
       <div className="px-24px">
         <div className="mb-20px flex items-center">
           <BackgroundImageWithPlaceholder
-            // src={session?.user?.image ?? user.profileImage}
-            src={userProfile.profileImage}
+            src={session.user.image}
             className="mr-24px h-[80px] w-[80px] rounded-full"
           />
 
           <div>
-            {/* TODO: 세션 처리 확인 */}
-            {/* <DevelopmentPendingDialog name={session?.user?.name ?? user.name} /> */}
-            <DevelopmentPendingDialog name={userProfile.name} />
-
+            <DevelopmentPendingDialog name={session.user.name} />
             <div className="flex text-14px">
-              <div>{userProfile.mbti}</div>
+              <div>{session.user.mbti}</div>
               <div className="mx-2 border-l"></div>
-              <div>{userProfile.gender}</div>
+              <div>{session.user.gender}</div>
               <div className="mx-2 border-l"></div>
-              <div>{userProfile.ageRange}</div>
+              <div>{session.user.ageRange}</div>
               <div className="mx-2 border-l"></div>
-              <div>{userProfile.region}</div>
+              <div>{session.user.region}</div>
             </div>
           </div>
         </div>
 
+        <div className="flex flex-col">
+          <span className="font-medium">나의 취향 분석</span>
+          <span className="text-11px text-slate-500">
+            나의 취향 분석은 위시리스트를 기반으로 제공됩니다.
+          </span>
+          <div className="w-full">
+            <DoughnutChart data={[1, 2, 3]} />
+          </div>
+        </div>
         {/* <SectionList title="신청/예약한 활동" list={list} totalCount={12} /> */}
         {/* <div className="h-20px"></div> */}
         <SectionList
@@ -135,9 +137,12 @@ export default function Profile() {
               <p>제보해주세요!</p>
             </div>
 
-            <div className="text-12px text-slate-600">
+            <Link
+              className="text-12px text-slate-600"
+              href="mailto:moharu.site@gmail.com?subject=Activity Link&body=모하루에게 전시, 행사, 모임, 장소 등 다양한 오프라인 활동을 제보해주세요!"
+            >
               moharu.site@gmail.com
-            </div>
+            </Link>
           </div>
 
           <Image
@@ -147,6 +152,7 @@ export default function Profile() {
             height={110}
           />
         </div>
+
         <div className="text-14px">
           <p className="mb-20px">
             <a
@@ -155,8 +161,8 @@ export default function Profile() {
               rel="noopener noreferrer"
             >
               서비스 이용약관
-            </a>{' '}
-            /{' '}
+            </a>
+            /
             <a
               href="https://www.notion.so/moharu/9dbfac8563334017bc6950739a5d9c57"
               target="_blank"
@@ -165,17 +171,17 @@ export default function Profile() {
               개인정보처리방침
             </a>
           </p>
-          <p>버전 1.0.0</p>
-          <Link href="/auth/login">
-            <Button type="button">로그인 페이지</Button>
-          </Link>
+          <p className="mb-20px">버전 1.0.0</p>
 
           <form
             action={async () => {
+              'use server';
               await signOut();
             }}
           >
-            <Button type="submit">로그아웃</Button>
+            <button type="submit" className="text-slate-500">
+              로그아웃
+            </button>
           </form>
         </div>
       </div>

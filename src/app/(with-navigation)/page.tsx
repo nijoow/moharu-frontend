@@ -16,10 +16,22 @@ import { ko } from 'date-fns/locale';
 import moment from 'moment';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { redirect, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
   const { data: session } = useSession();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (!session && !searchParams.get('from')) {
+      redirect('/auth/login');
+    }
+    console.log(session && !session.user.mbti);
+    if (session && !session.user.mbti) {
+      redirect('/auth/signup/extra-required');
+    }
+  }, [session]);
 
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -43,7 +55,8 @@ export default function Home() {
           icon: 'list',
         });
         setCategoryList(data);
-      });
+      })
+      .catch(e => console.log(e));
   };
 
   const fetchActivities = () => {
@@ -61,9 +74,9 @@ export default function Home() {
           };
         },
       );
-
-      setActivities(activitiesWithWishStatus);
-    });
+        setActivities(activitiesWithWishStatus);
+      })
+      .catch(e => console.log(e));
   };
 
   useEffect(() => {
@@ -73,6 +86,7 @@ export default function Home() {
   useEffect(() => {
     fetchActivities();
   }, [selectedCategoryId, selectedDate]);
+
   return (
     <>
       {/* TODO: 날짜 포맷을 위한 moment 사용 여부 */}
