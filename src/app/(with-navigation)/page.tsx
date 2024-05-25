@@ -23,15 +23,12 @@ import { useEffect, useState } from 'react';
 export default function Home() {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   useEffect(() => {
     if (searchParams.get('from') === 'signup') {
       toast({ description: '회원가입이 완료되었습니다!' });
-      router.replace('/');
     }
   }, []);
-
 
   // useEffect(() => {
   //   if (!session && !searchParams.get('from')) {
