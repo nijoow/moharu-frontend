@@ -8,8 +8,9 @@ import { useToast } from '@/components/ui/use-toast';
 import { getActivityInfoByType } from '@/lib/utils';
 import { Activity } from '@/types/type';
 import Link from 'next/link';
+import BackgroundImageWithPlaceholder from '../common/background-image-with-placeholder';
+import HearFillIcon from '/public/images/icons/heart-fill.svg';
 import HeartIcon from '/public/images/icons/heart.svg';
-
 interface MainActivityCardProps {
   activity: Activity;
 }
@@ -28,34 +29,41 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
     <>
       <div className="p-24px">
         <Link href={`/activities/${activity.id}`} className="relative mb-20px">
-          <div
+          <BackgroundImageWithPlaceholder
+            src={activity.coverImage}
             className="h-[340px] rounded-[12px]"
-            style={{
-              backgroundImage: `url(${activity.coverImage})`,
-              backgroundSize: 'cover',
-            }}
-          ></div>
+          />
           <ActivityTypeBadge
             className="absolute left-[14px] top-[14px]"
             type={activityType}
           />
         </Link>
         <div className="mt-20px">
-          <div className="flex justify-between">
+          <div className="mb-8px flex justify-between">
             {/* TODO: 디자인 시스템 typograph 적용  */}
-            <p>{activity.title}</p>
+            <p className="text-20px font-bold">{activity.title}</p>
             <div className="flex">
               <button className="mr-16px" onClick={onClickLikeBtn}>
-                <HeartIcon
-                  width={24}
-                  height={24}
-                  className="stroke-slate-900"
-                />
+                {/* TODO: HearFillIcon fill pink */}
+                {activity.wished ? (
+                  <HearFillIcon
+                    width={24}
+                    height={24}
+                    className="fill-red-500"
+                  />
+                ) : (
+                  <HeartIcon
+                    width={24}
+                    height={24}
+                    className="stroke-slate-900"
+                  />
+                )}
               </button>
               <ShareDialog activity={activity} />
             </div>
           </div>
           <ActiveLocationInfo
+            type={activityType}
             location={activity.location}
             address={activity.address}
           />

@@ -2,15 +2,25 @@ export interface Activity {
   id: number;
   categoryId: number;
   title: string;
-  coverImage: string;
+  coverImage: string | null;
   type: string;
   address: string;
   status: string;
   startDate: string;
   endDate: string;
   location: string;
+  businessHours: string;
+  holidays: string;
+  additionalInfo: AdditionalInfo[];
+  link: string | null;
+  wished: boolean;
 }
 
+interface AdditionalInfo {
+  type: string;
+  label: string;
+  value: string;
+}
 export interface Category {
   id: number;
   name: string;

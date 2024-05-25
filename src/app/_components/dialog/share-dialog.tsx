@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from '@/components/ui/use-toast';
 import { Activity } from '@/types/type';
-import Image from 'next/image';
+import ImageWithPlaceholder from '../common/image-with-placeholder';
 
 export function ShareDialog({ activity }: { activity: Activity }) {
   const moharuHomepageUrl = 'https://www.moharu.site';
@@ -35,10 +35,7 @@ export function ShareDialog({ activity }: { activity: Activity }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button
-          type="button"
-          className="ml-auto flex h-10 w-10 items-center justify-center rounded-full bg-white/60"
-        >
+        <button>
           <ShareIcon width={24} height={24} className="stroke-slate-900" />
         </button>
       </DialogTrigger>
@@ -51,8 +48,7 @@ export function ShareDialog({ activity }: { activity: Activity }) {
           </DialogDescription>
         </DialogHeader>
         <div className="flex w-full items-center gap-3">
-          {/* TODO: activity 정보 받아오기 */}
-          <Image
+          <ImageWithPlaceholder
             src={activity.coverImage}
             width={80}
             height={80}

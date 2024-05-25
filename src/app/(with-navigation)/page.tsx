@@ -34,7 +34,21 @@ export default function Home() {
   useEffect(() => {
     fetch('/apis/activities')
       .then(response => response.json())
-      .then(data => setActivities(data));
+      .then(data => {
+        // TODO: activitiesWithWishStatus 임시 값
+        // const wishedActivityIds = data.wishedActivityIds;
+        const wishedActivityIds = [11, 12, 13, 14];
+        const activitiesWithWishStatus: Activity[] = data.activities.map(
+          (activity: Activity) => {
+            return {
+              ...activity,
+              wished: wishedActivityIds.includes(activity.id),
+            };
+          },
+        );
+
+        setActivities(activitiesWithWishStatus);
+      });
   }, []);
 
   return (
@@ -80,6 +94,14 @@ export default function Home() {
             <MainActivityCard key={activity.id} activity={activity} />
           ))
         : null}
+      {/* TODO: footer 컴포넌트 분리 및 UI, link 작업 */}
+      <footer>
+        <p>모두에게 선물같은 하루, 모하루</p>
+        <p>
+          모하루(Moharu)는 모하루기버즈팀(Team Moharu Givers)이 비사이드
+          포텐데이405에 참여하여 제작하게 된 사이드프로젝트입니다.
+        </p>
+      </footer>
     </>
   );
 }
