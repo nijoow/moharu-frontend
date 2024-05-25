@@ -174,8 +174,7 @@ export default function SignupEmailPage() {
           className="mt-auto"
           type="button"
           disabled={!!form.formState.errors.email || !emailValue}
-          // onClick={handleClickSendAuthenticationCodeButton}
-          onClick={() => router.replace('/auth/signup/password')}
+          onClick={handleClickSendAuthenticationCodeButton}
         >
           인증코드 전송
         </Button>
