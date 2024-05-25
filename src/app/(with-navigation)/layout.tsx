@@ -9,7 +9,7 @@ export default function Layout({
 }>) {
   return (
     <>
-      <main className="flex flex-auto flex-col overflow-auto">{children}</main>
+      <main className="flex flex-auto flex-col">{children}</main>
       <NavigationBar />
     </>
   );

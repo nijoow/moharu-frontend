@@ -11,57 +11,69 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useSignUpContext } from '../_context/useSignUpContext';
 
 const formSchema = z.object({
   name: z.string().optional(),
   gender: z
-    .union([z.literal('Male'), z.literal('Female'), z.null()])
+    .union([z.literal('male'), z.literal('female'), z.literal('etc')])
     .optional(),
   ageRange: z
     .union([
-      z.literal('10'),
-      z.literal('20'),
-      z.literal('30'),
-      z.literal('40'),
-      z.literal('50'),
-      z.literal('60'),
-      z.literal('70'),
-      z.literal('80'),
-      z.null(),
+      z.literal('10대'),
+      z.literal('20대'),
+      z.literal('30대'),
+      z.literal('40대'),
+      z.literal('50대'),
+      z.literal('60대'),
+      z.literal('70대'),
+      z.literal('80대 이상'),
+      z.literal('etc'),
     ])
     .optional(),
-  location: z.string().optional().nullable(),
+  region: z.string().optional().nullable(),
+  profileImage: z.string(),
 });
 
 const genderButtons: {
-  value: 'Male' | 'Female' | null;
+  value: 'male' | 'female' | 'etc';
   buttonText: string;
 }[] = [
-  { value: 'Male', buttonText: '남성' },
-  { value: 'Female', buttonText: '여성' },
-  { value: null, buttonText: '선택안함' },
+  { value: 'male', buttonText: '남성' },
+  { value: 'female', buttonText: '여성' },
+  { value: 'etc', buttonText: '선택안함' },
 ];
 
 const ageRangeButtons: {
-  value: '10' | '20' | '30' | '40' | '50' | '60' | '70' | '80' | null;
+  value:
+    | '10대'
+    | '20대'
+    | '30대'
+    | '40대'
+    | '50대'
+    | '60대'
+    | '70대'
+    | '80대 이상'
+    | 'etc';
   buttonText: string;
 }[] = [
-  { value: '10', buttonText: '10대' },
-  { value: '20', buttonText: '20대' },
-  { value: '30', buttonText: '30대' },
-  { value: '40', buttonText: '40대' },
-  { value: '50', buttonText: '50대' },
-  { value: '60', buttonText: '60대' },
-  { value: '70', buttonText: '70대' },
-  { value: '80', buttonText: '80대 이상' },
-  { value: null, buttonText: '선택안함' },
+  { value: '10대', buttonText: '10대' },
+  { value: '20대', buttonText: '20대' },
+  { value: '30대', buttonText: '30대' },
+  { value: '40대', buttonText: '40대' },
+  { value: '50대', buttonText: '50대' },
+  { value: '60대', buttonText: '60대' },
+  { value: '70대', buttonText: '70대' },
+  { value: '80대 이상', buttonText: '80대 이상' },
+  { value: 'etc', buttonText: '선택안함' },
 ];
 
-const locationButtons: {
+const regionButtons: {
   value: 'Seoul' | 'Gyeonggi' | null;
   buttonText: string;
 }[] = [
@@ -71,15 +83,31 @@ const locationButtons: {
 ];
 
 export default function SignUpExtraOptionalPage() {
+  const { data: session } = useSession();
   const router = useRouter();
-
+  const { signUpInfo, setSignUpInfo } = useSignUpContext();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
+    defaultValues: {
+      name: session?.user?.name || '',
+      profileImage:
+        session?.user?.profileImage ||
+        '/images/logo/Logo_Image_Main_Moharu.png',
+    },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    router.push('/?from=signup');
+  const profileImageUrl = form.watch('profileImage');
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const response = await fetch('/apis/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...signUpInfo, ...values }),
+    });
+    if (response.status === 201) {
+      router.push('/?from=signup');
+    }
   };
 
   return (
@@ -89,7 +117,7 @@ export default function SignUpExtraOptionalPage() {
 
         <Label className="mb-1.5">프로필 사진</Label>
         <Image
-          src="/images/logo/Logo_Image_Main_Moharu.png"
+          src={profileImageUrl}
           alt="프로필 사진"
           width={100}
           height={100}
@@ -102,11 +130,21 @@ export default function SignUpExtraOptionalPage() {
             <FormItem className="mt-10">
               <FormLabel>이름/닉네임</FormLabel>
               <FormControl>
-                <Input type="text" defaultValue={'이름'} {...field} />
+                <Input
+                  type="text"
+                  defaultValue={'이름'}
+                  {...field}
+                  onChange={e => {
+                    form.setValue('name', e.target.value, {
+                      shouldValidate: true,
+                    });
+                  }}
+                />
               </FormControl>
             </FormItem>
           )}
         />
+
         <Label className="mb-1.5 mt-10">성별 (선택)</Label>
         <div className="flex gap-1.5">
           {genderButtons.map(({ value, buttonText }) => (
@@ -147,13 +185,13 @@ export default function SignUpExtraOptionalPage() {
 
         <Label className="mb-1.5 mt-10">지역 (선택)</Label>
         <div className="flex gap-1.5 ">
-          {locationButtons.map(({ value, buttonText }) => (
+          {regionButtons.map(({ value, buttonText }) => (
             <Button
               key={`gender-${value}`}
               type="button"
-              variant={form.watch('location') === value ? 'default' : 'outline'}
+              variant={form.watch('region') === value ? 'default' : 'outline'}
               onClick={() => {
-                form.setValue('location', value, {
+                form.setValue('region', value, {
                   shouldValidate: true,
                 });
               }}
@@ -164,6 +202,7 @@ export default function SignUpExtraOptionalPage() {
           ))}
         </div>
       </form>
+
       <Button
         size="big"
         className="mt-auto"

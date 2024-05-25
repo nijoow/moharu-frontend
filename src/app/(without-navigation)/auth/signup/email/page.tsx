@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import Timer from '../_components/timer';
+import { useSignUpContext } from '../_context/useSignUpContext';
 
 const formSchema = z.object({
   email: z.string().email({ message: '올바른 이메일 형식이 아닙니다.' }),
@@ -25,11 +26,11 @@ const formSchema = z.object({
 
 export default function SignupEmailPage() {
   const router = useRouter();
+  const { signUpInfo, setSignUpInfo } = useSignUpContext();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
   });
-
   const [time, setTime] = useState(0);
   const [
     emailAuthenticationCodeRequested,
@@ -37,10 +38,17 @@ export default function SignupEmailPage() {
   ] = useState(false);
 
   const emailValue = form.watch('email');
+  const authenticationCode = form.watch('authenticationCode');
 
   const RequestEmailAuthentication = () => {
+    fetch('/apis/user/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: emailValue }),
+    });
     setTime(60 * 5);
-    // TODO: 인증 코드 요청
   };
 
   const handleClickSendAuthenticationCodeButton = () => {
@@ -48,8 +56,21 @@ export default function SignupEmailPage() {
     setEmailAuthenticationCodeRequested(true);
   };
 
-  const handleClickAuthenticationButton = () => {
-    router.push('/auth/signup/password');
+  const handleClickAuthenticationButton = async () => {
+    const response = await fetch('/apis/user/email/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: emailValue,
+        code: authenticationCode,
+      }),
+    });
+    if (response.status === 201) {
+      setSignUpInfo({ ...signUpInfo, email: emailValue });
+      router.replace('/auth/signup/password');
+    }
   };
 
   return (
@@ -117,7 +138,7 @@ export default function SignupEmailPage() {
         <Button
           size="big"
           className="mt-auto"
-          type="submit"
+          type="button"
           disabled={!!form.formState.errors.email || !emailValue}
           onClick={handleClickSendAuthenticationCodeButton}
         >
@@ -128,7 +149,7 @@ export default function SignupEmailPage() {
         <Button
           size="big"
           className="mt-auto"
-          type="submit"
+          type="button"
           disabled={!form.formState.isValid}
           onClick={handleClickAuthenticationButton}
         >

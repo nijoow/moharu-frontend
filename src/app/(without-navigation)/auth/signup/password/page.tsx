@@ -15,6 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useSignUpContext } from '../_context/useSignUpContext';
 
 const formSchema = z
   .object({
@@ -38,16 +39,18 @@ const formSchema = z
 
 export default function SignUpPasswordPage() {
   const router = useRouter();
+  const { signUpInfo, setSignUpInfo } = useSignUpContext();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
   });
 
-  const password = form.watch('password');
-  const confirmPassword = form.watch('confirmPassword');
+  const passwordValue = form.watch('password');
+  const confirmPasswordValue = form.watch('confirmPassword');
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    router.push('/auth/signup/extra-required');
+    setSignUpInfo({ ...signUpInfo, password: passwordValue });
+    router.replace('/auth/signup/extra-required');
   };
 
   return (
@@ -66,7 +69,7 @@ export default function SignUpPasswordPage() {
                   onBlur={() => form.trigger('confirmPassword')}
                 />
               </FormControl>
-              {!form.formState.errors.password && !password?.length && (
+              {!form.formState.errors.password && !passwordValue?.length && (
                 <FormDescription>
                   8자 이상의 영문, 숫자, 특수문자 조합을 입력해주세요.
                 </FormDescription>
@@ -85,7 +88,7 @@ export default function SignUpPasswordPage() {
                 <Input type="password" {...field} />
               </FormControl>
               {!form.formState.errors.confirmPassword &&
-                !confirmPassword?.length && (
+                !confirmPasswordValue?.length && (
                   <FormDescription>
                     동일한 비밀번호를 입력해주세요.
                   </FormDescription>

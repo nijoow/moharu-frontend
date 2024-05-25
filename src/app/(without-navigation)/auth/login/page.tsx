@@ -32,7 +32,7 @@ export default function LoginPage() {
         <form
           action={async () => {
             'use server';
-            await signIn('google', { redirectTo: '/' });
+            await signIn('google', { redirectTo: '/?from=login' });
           }}
         >
           <Button
@@ -52,7 +52,7 @@ export default function LoginPage() {
         <form
           action={async () => {
             'use server';
-            await signIn('kakao', { redirectTo: '/' });
+            await signIn('kakao', { redirectTo: '/?from=login' });
           }}
         >
           <Button
@@ -70,10 +70,13 @@ export default function LoginPage() {
           </Button>
         </form>
       </div>
-      <span className="text-[11px] text-slate-400">
+      <Link className="mb-5 text-14px text-white" href={'/?from=browse'}>
+        로그인 없이 모하루 먼저 둘러보기
+      </Link>
+      <span className="text-11px text-slate-400">
         로그인함으로써 Moharu의 정책 및 약관에 동의합니다.
       </span>
-      <span className="text-[11px] text-slate-400">
+      <span className="text-11px text-slate-400">
         이용약관/개인정보 처리방침
       </span>
     </div>

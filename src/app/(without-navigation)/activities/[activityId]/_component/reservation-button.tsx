@@ -13,7 +13,8 @@ const ReservationButton: React.FC<ReservationButtonProps> = ({ id }) => {
   return (
     <Button
       onClick={() => router.push(`/activities/${id}/reservation`)}
-      className="sticky bottom-0 left-0 mt-auto w-full"
+      size={'big'}
+      className="sticky bottom-0 left-0 mt-auto"
     >
       위시리스트에 추가하기
     </Button>

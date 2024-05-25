@@ -31,7 +31,7 @@ const NavigationBar = () => {
   ];
 
   return (
-    <nav className="sticky bottom-0 left-0 grid h-16 w-full flex-none grid-cols-3 border-t-[1px] border-slate-200">
+    <nav className="sticky bottom-0 left-0 grid h-16 w-full flex-none grid-cols-3 border-t-[1px] border-slate-200 bg-white">
       {mobileNavigationList.map(({ href, Icon, text, active }) => (
         <MobileNavigationLink
           key={text}

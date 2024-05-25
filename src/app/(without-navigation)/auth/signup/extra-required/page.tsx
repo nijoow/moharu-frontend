@@ -13,14 +13,16 @@ import {
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useSignUpContext } from '../_context/useSignUpContext';
 
 const phoneRegex = /^01([0|1|6|7|8|9])([0-9]{4})([0-9]{4})$/;
 
 const formSchema = z.object({
-  phoneNumber: z
+  telephone: z
     .string()
     .regex(phoneRegex, '올바른 휴대폰 번호 형식이 아닙니다.'),
   mbti: z.object({
@@ -51,13 +53,26 @@ const mbtiTypes: {
 
 export default function SignUpExtraRequiredPage() {
   const router = useRouter();
+  const { data: session } = useSession();
+
+  const { signUpInfo, setSignUpInfo } = useSignUpContext();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    router.push('/auth/signup/extra-optional');
+    const { telephone, mbti } = values;
+    if (session) {
+      setSignUpInfo(prev => ({ ...prev }));
+    }
+    setSignUpInfo({
+      ...signUpInfo,
+      telephone,
+      mbti: mbti.EI + mbti.SN + mbti.TF + mbti.JP,
+      socialType: session?.user?.socialType || 'local',
+    });
+    router.replace('/auth/signup/extra-optional');
   };
 
   return (
@@ -65,7 +80,7 @@ export default function SignUpExtraRequiredPage() {
       <form className="flex h-full flex-col gap-5 px-10 pt-10">
         <FormField
           control={form.control}
-          name="phoneNumber"
+          name="telephone"
           render={({ field }) => (
             <FormItem>
               <FormLabel>휴대폰 번호</FormLabel>
@@ -77,19 +92,19 @@ export default function SignUpExtraRequiredPage() {
                   {...field}
                   onChange={e =>
                     form.setValue(
-                      'phoneNumber',
+                      'telephone',
                       e.target.value.replace(/[^0-9]/g, ''),
                       { shouldValidate: true },
                     )
                   }
                 />
               </FormControl>
-              {!form.formState.errors.phoneNumber && (
+              {!form.formState.errors.telephone && (
                 <FormDescription>
                   하이픈(-)을 제외하고 숫자만 입력해주세요.
                 </FormDescription>
               )}
-              {form.formState.errors.phoneNumber && <FormMessage />}
+              {form.formState.errors.telephone && <FormMessage />}
             </FormItem>
           )}
         />

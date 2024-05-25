@@ -1,7 +1,6 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 type SignUpStepPathname =
@@ -31,8 +30,7 @@ const SignUpProgress = () => {
     <div className="relative mx-10 flex justify-between">
       {signUpStepList.map(({ step, url, typeText }) => (
         <div key={step} className="z-20 flex flex-col items-center gap-1">
-          <Link
-            href={url}
+          <div
             className={cn(
               ' flex h-[30px] w-[30px] items-center justify-center rounded-full bg-slate-400 text-slate-50 transition-colors',
               {
@@ -41,7 +39,7 @@ const SignUpProgress = () => {
             )}
           >
             {step}
-          </Link>
+          </div>
           {signUpStep[pathname] === step && (
             <span className="text-xs text-slate-900">{typeText}</span>
           )}
