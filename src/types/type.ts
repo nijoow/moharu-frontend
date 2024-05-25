@@ -22,7 +22,7 @@ interface AdditionalInfo {
   value: string;
 }
 export interface Category {
-  id: number;
+  id: number | string;
   name: string;
   description: string;
   icon: string;

@@ -1,27 +1,30 @@
 import { Category } from '@/types/type';
 import Image from 'next/image';
-import { useState } from 'react';
 
 interface CategoryBarProps {
   categoryList: Category[];
+  selectedCategoryId: string;
+  onCategorySelect: (id: string) => void;
 }
 
-const CategoryBar: React.FC<CategoryBarProps> = ({ categoryList }) => {
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(1);
-
-  const onClickCategoryBtn = (id: number) => () => {
-    setSelectedCategoryId(id);
+const CategoryBar: React.FC<CategoryBarProps> = ({
+  categoryList,
+  selectedCategoryId,
+  onCategorySelect,
+}) => {
+  const onClickCategoryBtn = (id: number | string) => () => {
+    onCategorySelect(id.toString());
   };
 
   return (
     // TODO: 스크롤 처리
-    <div className="scroll-x flex justify-between py-12px">
+    <div className="scroll-x flex justify-between px-24px py-12px">
       {categoryList.length > 0
         ? categoryList.map(category => (
             <div
               onClick={onClickCategoryBtn(category.id)}
               key={category.id}
-              className={`flex w-[70px] cursor-pointer flex-col items-center justify-center ${category.id === selectedCategoryId ? 'border-b border-black' : ''}`}
+              className={`flex w-[70px] cursor-pointer flex-col items-center justify-center border-b ${category.id.toString() === selectedCategoryId ? ' border-slate-900' : 'border-white'}`}
             >
               {/* TODO: 이미지처리 */}
               <Image
@@ -30,11 +33,6 @@ const CategoryBar: React.FC<CategoryBarProps> = ({ categoryList }) => {
                 width={20}
                 height={20}
               />
-              {/* <CalendarIcon
-            width={20}
-            height={20}
-            className="mr-12px stroke-slate-400"
-          /> */}
               <p className="my-12px"> {category.name}</p>
             </div>
           ))

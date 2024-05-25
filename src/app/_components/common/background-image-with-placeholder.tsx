@@ -15,6 +15,7 @@ const BackgroundImageWithPlaceholder: React.FC<
       style={{
         backgroundImage: backgroundImage,
         backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}
     ></div>
   );

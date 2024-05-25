@@ -1,3 +1,4 @@
+import BackgroundImageWithPlaceholder from '@/app/_components/common/background-image-with-placeholder';
 import { Activity } from '@/types/type';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
@@ -17,22 +18,17 @@ const SectionList = ({
         <div className="mr-8px font-medium">{title}</div>
         <div className="text-pink-500">{totalCount}</div>
       </div>
-      <button>
+      <Link href="/wish-list">
         <ChevronRight width={24} height={24} />
-      </button>
+      </Link>
     </div>
     <div className="grid grid-cols-3 gap-x-3">
       {list.slice(0, 3).map(item => (
-        <Link href={`/activities/${item.id}`}>
-          <div
-            key={item.id}
+        <Link href={`/activities/${item.id}`} key={item.id}>
+          <BackgroundImageWithPlaceholder
+            src={item.coverImage}
             className="h-[140px] w-full rounded-[12px]"
-            style={{
-              backgroundImage: `url(${item.coverImage})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          ></div>
+          />
         </Link>
       ))}
     </div>
