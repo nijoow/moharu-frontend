@@ -21,12 +21,19 @@ export default function RootLayout({
     <AuthSessionProvider>
       <RecoilProvider>
         <html lang="en" className="h-full">
-          <body className={`${pretendard.variable} font-pretendard h-full`}>
-            <div className="mx-auto h-full max-w-md shadow-md">
-              <div className="relative mx-auto flex h-full  flex-col">
-                {children}
+          <body className={`${pretendard.variable} h-full font-pretendard`}>
+            <div
+              className="h-screen w-screen bg-cover bg-center bg-no-repeat"
+              style={{
+                backgroundImage: "url('/images/background/background.png')",
+              }}
+            >
+              <div className="mx-auto h-full max-w-md overflow-y-scroll bg-white">
+                <div className="relative mx-auto flex h-full  flex-col">
+                  {children}
+                </div>
+                <Toaster />
               </div>
-              <Toaster />
             </div>
           </body>
         </html>

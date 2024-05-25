@@ -53,7 +53,9 @@ export function ShareDialog({
             className="h-20 w-20 flex-none rounded-lg bg-slate-500"
           />
           <div className="flex flex-auto flex-col">
-            <h4 className="text-20px font-bold">모하루</h4>
+            <h4 className="truncate-2-lines text-20px font-bold">
+              {activity.title}
+            </h4>
             <p className="w-auto break-all text-12px text-slate-500">
               {activityUrl}
             </p>

@@ -26,7 +26,7 @@ export function getActivityInfoByType(activityType: string): ActivityInfo {
       };
     case 'place':
       return {
-        type: ACTIVITY_TYPE.EVENT,
+        type: ACTIVITY_TYPE.PLACE,
         linkText: '홈페이지 보러가기',
       };
     default:

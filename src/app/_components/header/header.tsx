@@ -13,6 +13,7 @@ import WishButton from '../activity/wish-button';
 interface HeaderProps {
   title?: string;
   backButton?: boolean;
+  listButton?: boolean;
   shareButton?: boolean;
   likeButton?: boolean;
   transparent?: boolean;
@@ -23,6 +24,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({
   title,
   backButton = false,
+  listButton = false,
   shareButton = false,
   likeButton = false,
   transparent = false,
@@ -55,6 +57,20 @@ const Header: React.FC<HeaderProps> = ({
         <button
           type="button"
           onClick={() => router.back()}
+          className="mr-auto flex h-10 w-10 items-center justify-center rounded-full bg-white/60"
+        >
+          <Image
+            src="/images/icons/chevron-left.svg"
+            alt="logo"
+            width={32}
+            height={32}
+          />
+        </button>
+      )}
+      {listButton && (
+        <button
+          type="button"
+          onClick={() => router.push('/')}
           className="mr-auto flex h-10 w-10 items-center justify-center rounded-full bg-white/60"
         >
           <Image

@@ -22,5 +22,5 @@ export async function fetchWithToken(url: string, options: FetchOptions = {}) {
   }
 
   // TODO: response로 리턴하도록 변경?
-  return response.json();
+  return response;
 }

@@ -29,7 +29,7 @@ const WishListCard: React.FC<WishListCardProps> = ({ wishList }) => {
         />
       </div>
       <div>
-        <p className="mb-4px">{wishList.title}</p>
+        <p className="truncate-2-lines mb-4px break-all">{wishList.title}</p>
         <div className="text-12px">
           <p>{wishList.location}</p>
           <p>{activitySchedule}</p>

@@ -40,6 +40,7 @@ export default function Home() {
   //   }
   // }, [session]);
 
+  const [open, setOpen] = useState(false);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -47,6 +48,7 @@ export default function Home() {
 
   const handleSelect = (date?: Date) => {
     setSelectedDate(date);
+    setOpen(false);
     // TODO: 달력 선택 시, 달력 닫히도록 처리
     // onClose();
   };
@@ -73,6 +75,7 @@ export default function Home() {
     const url = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/activities?categoryId=${selectedCategoryId}&selectedDate=${formattedDate}`;
 
     fetchWithToken(url)
+      .then(res => res.json())
       .then(data => {
         const activitiesWithWishStatus: Activity[] = data.activities.map(
           (activity: Activity) => {
@@ -99,12 +102,15 @@ export default function Home() {
     <>
       {/* TODO: 날짜 포맷을 위한 moment 사용 여부 */}
       <div className="px-24px pb-12px pt-24px">
-        <Popover>
+        <Popover open={open}>
           <PopoverTrigger asChild>
-            <div className="flex cursor-pointer rounded-full border-[1px] border-[#E2E8F0] px-[20px] py-[18px]">
+            <div
+              className="flex w-full cursor-pointer rounded-full border-[1px] border-[#E2E8F0] px-[20px] py-[18px]"
+              onClick={() => setOpen(true)}
+            >
               <Image
                 src="/images/icons/calendar-days.svg"
-                alt="위치"
+                alt="캘린더"
                 width={24}
                 height={24}
                 className="mr-[14px]"
@@ -115,7 +121,7 @@ export default function Home() {
                 {selectedDate ? (
                   format(selectedDate, 'MMMM do (E)', { locale: ko })
                 ) : (
-                  <span>Pick a date</span>
+                  <span>날짜를 선택 해 주세요</span>
                 )}
               </span>
             </div>

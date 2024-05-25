@@ -13,7 +13,8 @@ export default async function Profile() {
 
   // if (!session) redirect('/auth/login');
 
-  const data = await fetchWithToken('https://api.moharu.site/user');
+  const response = await fetchWithToken('https://api.moharu.site/user');
+  const data = await response.json();
 
   const userProfile = data.userProfile;
   const activityWishes = data.activityWishes;

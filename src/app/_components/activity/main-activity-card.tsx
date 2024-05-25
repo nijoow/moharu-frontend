@@ -25,15 +25,17 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
   return (
     <>
       <div className="bg-white p-24px">
-        <Link href={`/activities/${activity.id}`} className="relative mb-20px">
-          <BackgroundImageWithPlaceholder
-            src={activity.coverImage}
-            className="h-[340px] rounded-[12px]"
-          />
-          <ActivityTypeBadge
-            className="absolute left-[14px] top-[14px]"
-            type={activityType}
-          />
+        <Link href={`/activities/${activity.id}`}>
+          <div className="relative mb-20px">
+            <BackgroundImageWithPlaceholder
+              src={activity.coverImage}
+              className="h-[340px] rounded-[12px]"
+            />
+            <ActivityTypeBadge
+              className="absolute left-[14px] top-[14px]"
+              type={activityType}
+            />
+          </div>
         </Link>
         <div className="mt-20px">
           <div className="mb-8px flex justify-between">

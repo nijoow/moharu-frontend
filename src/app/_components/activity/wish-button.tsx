@@ -19,27 +19,45 @@ const WishButton: React.FC<WishButtonProps> = ({
   const [isWish, setIsWish] = useState(initialIsWish);
 
   const handleClick = async () => {
-    const response = await fetchWithToken(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/activity-wishes`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    if (isWish) {
+      const response = await fetchWithToken(
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/activity-wishes/${activityId}`,
+        {
+          method: 'DELETE',
         },
-        body: JSON.stringify({
-          activitiesId: activityId,
-        }),
-      },
-    );
-    console.log(response, response.status);
+      );
 
-    if (response) {
-      setIsWish(!isWish);
-      LikeToast({ isWish: isWish ?? false, id: activityId });
+      if (response.ok) {
+        setIsWish(!isWish);
+        LikeToast({ isWish: isWish ?? false, id: activityId });
+      } else {
+        toast({
+          description: '위시리스트 삭제에 실패했습니다.',
+        });
+      }
     } else {
-      toast({
-        description: '위시리스트 추가에 실패했습니다.',
-      });
+      const response = await fetchWithToken(
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/activity-wishes`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            activitiesId: activityId,
+          }),
+        },
+      );
+      console.log(response, response.status);
+
+      if (response.ok) {
+        setIsWish(!isWish);
+        LikeToast({ isWish: isWish ?? false, id: activityId });
+      } else {
+        toast({
+          description: '위시리스트 추가에 실패했습니다.',
+        });
+      }
     }
   };
 

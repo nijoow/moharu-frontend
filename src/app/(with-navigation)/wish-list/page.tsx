@@ -18,14 +18,16 @@ export default function WishListPage() {
   const fetchData = (value: string) => {
     fetchWithToken(
       `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/activities/wish/list?type=${value}`,
-    ).then(data => {
-      setWishList(data.activities);
+    )
+      .then(res => res.json())
+      .then(data => {
+        setWishList(data.activities);
 
-      // totalCount 를 전체 일때만 변경
-      if (value === '') {
-        setTotalCount(data.totalCount);
-      }
-    });
+        // totalCount 를 전체 일때만 변경
+        if (value === '') {
+          setTotalCount(data.totalCount);
+        }
+      });
   };
 
   useEffect(() => {

@@ -23,12 +23,14 @@ export default function ActivityPage() {
   useEffect(() => {
     fetchWithToken(
       `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/activities/${params.activityId}`,
-    ).then(data =>
-      setActivity({
-        ...data.activity,
-        isWish: data.isWish,
-      }),
-    );
+    )
+      .then(res => res.json())
+      .then(data =>
+        setActivity({
+          ...data.activity,
+          isWish: data.isWish,
+        }),
+      );
   }, []);
 
   if (!activity) return null;
@@ -37,7 +39,7 @@ export default function ActivityPage() {
   return (
     <>
       <Header
-        backButton
+        listButton
         shareButton
         likeButton
         transparent={true}
