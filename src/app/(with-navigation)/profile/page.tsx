@@ -4,6 +4,7 @@ import TitleHeader from '@/app/_components/header/title-header';
 import { signOut } from '@/auth';
 import { fetchWithToken } from '@/lib/fetch';
 import Image from 'next/image';
+import Link from 'next/link';
 import DoughnutChart from './_component/doughnut-chart';
 import SectionList from './_component/section-list';
 
