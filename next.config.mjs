@@ -14,7 +14,7 @@ const nextConfig = {
   },
   async rewrites() {
     return {
-      fallback: [
+      afterFiles: [
         {
           source: '/apis/:path*',
           destination: `https://api.moharu.site/:path*`,
