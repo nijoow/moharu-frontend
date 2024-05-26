@@ -14,10 +14,9 @@ import { fetchWithToken } from '@/lib/fetch';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import { z } from 'zod';
 import { signUpInformationState } from '../_recoil/atom';
 
@@ -87,8 +86,8 @@ const regionButtons: {
 
 export default function SignUpExtraOptionalPage() {
   const { data: session } = useSession();
-  const router = useRouter();
   const [signUpInfo, setSignUpInfo] = useRecoilState(signUpInformationState);
+  const resetSignInfo = useResetRecoilState(signUpInformationState);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -121,6 +120,7 @@ export default function SignUpExtraOptionalPage() {
       const data = await response.json();
 
       if (response.ok) {
+        resetSignInfo();
         signIn(data.socialType, {
           redirect: true,
           callbackUrl: '/?from=signup',
@@ -132,6 +132,7 @@ export default function SignUpExtraOptionalPage() {
         options,
       );
       if (response.ok) {
+        resetSignInfo();
         signIn('credentials', {
           email: signUpInfo.email,
           password: signUpInfo.password,
