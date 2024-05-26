@@ -49,6 +49,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async signIn({ account, user }) {
+      console.log(account);
+      console.log(user);
       if (account?.provider === 'credentials') {
         return true;
       }
@@ -68,8 +70,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }),
         },
       );
+      console.log(response);
 
       const data = await response.json();
+
       user.id = data.user.id;
       user.email = data.user.email;
       user.name = data.user.name;
@@ -82,6 +86,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       user.socialType = data.user.socialType;
       user.socialId = data.user.socialId;
       user.accessToken = data.accessToken;
+      console.log(user);
       return true;
     },
     async jwt({ token, user }) {
