@@ -43,6 +43,7 @@ export default function SignupEmailPage() {
 
   const emailValue = form.watch('email');
   const authenticationCode = form.watch('authenticationCode');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     resetSignInfo();
@@ -50,6 +51,7 @@ export default function SignupEmailPage() {
 
   const RequestEmailAuthentication = async () => {
     try {
+      setLoading(true);
       const response = await fetch(
         'https://api.moharu.site/auth/send-verify-email',
         {
@@ -70,12 +72,16 @@ export default function SignupEmailPage() {
       toast({
         description: '메일 전송에 실패하였습니다!',
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleClickSendAuthenticationCodeButton = async () => {
     try {
-      const response = await fetch('https://api.moharu.site/auth/check-email');
+      const response = await fetch(
+        `https://api.moharu.site/auth/check-email?email=${emailValue}`,
+      );
       const data = await response.json();
 
       if (data.exists) {
@@ -173,10 +179,10 @@ export default function SignupEmailPage() {
           size="big"
           className="mt-auto"
           type="button"
-          disabled={!!form.formState.errors.email || !emailValue}
+          disabled={!!form.formState.errors.email || !emailValue || loading}
           onClick={handleClickSendAuthenticationCodeButton}
         >
-          인증코드 전송
+          {loading ? '요청 중' : '인증코드 전송'}
         </Button>
       )}
       {emailAuthenticationCodeRequested && (

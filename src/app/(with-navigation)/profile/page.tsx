@@ -1,20 +1,14 @@
 import BackgroundImageWithPlaceholder from '@/app/_components/common/background-image-with-placeholder';
 import { DevelopmentPendingDialog } from '@/app/_components/dialog/development-pending-dialog';
 import TitleHeader from '@/app/_components/header/title-header';
-import { auth } from '@/auth';
 import { serverSideFetchWithToken } from '@/lib/fetch';
 import Image from 'next/image';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import DoughnutChart from './_component/doughnut-chart';
 import SectionList from './_component/section-list';
 import SignOutButton from './_component/signout-button';
 
 export default async function Profile() {
-  const session = await auth();
-
-  if (!session) redirect('/auth/login');
-
   const response = await serverSideFetchWithToken(
     'https://api.moharu.site/user',
   );
