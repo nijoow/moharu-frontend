@@ -50,7 +50,11 @@ const NavigationLink = ({
   return (
     <>
       {isLoginNeeded && !session ? (
-        <NeedLoginDialog Icon={Icon} text={text} active={active} />
+        <NeedLoginDialog>
+          <button className="col-span-1 flex h-full flex-col items-center justify-center">
+            <NavigationLinkItem Icon={Icon} text={text} active={active} />
+          </button>
+        </NeedLoginDialog>
       ) : (
         <Link
           href={href}

@@ -1,7 +1,9 @@
 import { toast } from '@/components/ui/use-toast';
 import { fetchWithToken } from '@/lib/fetch';
 import { HeartIcon } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
+import { NeedLoginDialog } from '../dialog/need-login-dialog';
 import { LikeToast } from './like-toast';
 import HeartFillIcon from '/public/images/icons/heart-fill.svg';
 
@@ -17,6 +19,7 @@ const WishButton: React.FC<WishButtonProps> = ({
   className,
 }) => {
   const [isWish, setIsWish] = useState(initialIsWish);
+  const { data: session } = useSession();
 
   const handleClick = async () => {
     if (isWish) {
@@ -61,17 +64,27 @@ const WishButton: React.FC<WishButtonProps> = ({
   };
 
   return (
-    <button className={className} onClick={handleClick}>
-      {isWish ? (
-        <HeartFillIcon
-          width={24}
-          height={24}
-          className="fill-pink-500 stroke-pink-500"
-        />
+    <>
+      {session ? (
+        <button className={className} onClick={handleClick}>
+          {isWish ? (
+            <HeartFillIcon
+              width={24}
+              height={24}
+              className="fill-pink-500 stroke-pink-500"
+            />
+          ) : (
+            <HeartIcon width={24} height={24} className="stroke-slate-900" />
+          )}
+        </button>
       ) : (
-        <HeartIcon width={24} height={24} className="stroke-slate-900" />
+        <NeedLoginDialog>
+          <button className={className}>
+            <HeartIcon width={24} height={24} className="stroke-slate-900" />
+          </button>
+        </NeedLoginDialog>
       )}
-    </button>
+    </>
   );
 };
 

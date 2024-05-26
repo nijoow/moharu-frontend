@@ -1,4 +1,3 @@
-import { NavigationLinkItem } from '@/app/(with-navigation)/_components/navigation-bar/navigation-link';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -12,26 +11,14 @@ import {
 } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
 
-export function NeedLoginDialog({
-  Icon,
-  text,
-  active,
-}: {
-  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  text: string;
-  active: boolean;
-}) {
+export function NeedLoginDialog({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const handleLogin = () => {
     router.push('/auth/login');
   };
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <button className="col-span-1 flex h-full flex-col items-center justify-center">
-          <NavigationLinkItem Icon={Icon} text={text} active={active} />
-        </button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogIcon icon="lock" />
