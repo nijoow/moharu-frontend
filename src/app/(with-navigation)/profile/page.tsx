@@ -1,32 +1,27 @@
-'use client';
 import BackgroundImageWithPlaceholder from '@/app/_components/common/background-image-with-placeholder';
 import { DevelopmentPendingDialog } from '@/app/_components/dialog/development-pending-dialog';
 import TitleHeader from '@/app/_components/header/title-header';
-import { fetchWithToken } from '@/lib/fetch';
+import { serverSideFetchWithToken } from '@/lib/fetch';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { redirect } from 'next/navigation';
 import DoughnutChart from './_component/doughnut-chart';
 import SectionList from './_component/section-list';
 import SignOutButton from './_component/signout-button';
 
-export default function Profile() {
-  const [data, setData] = useState<any>(null);
+export default async function Profile() {
+  const response = await serverSideFetchWithToken(
+    'https://api.moharu.site/user',
+  );
+  const data = await response.json();
 
-  useEffect(() => {
-    fetchWithToken('https://api.moharu.site/user')
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        setData(data);
-      });
-  }, []);
+  if (!response.ok) return redirect('/auth/login');
 
-  const userProfile = data?.userProfile;
-  const activityWishes = data?.activityWishes;
-  const wishTotalCount = data?.wishTotalCount;
+  const userProfile = data.userProfile;
+  const activityWishes = data.activityWishes;
+  const wishTotalCount = data.wishTotalCount;
 
-  const categoryCount = data?.categoryCount;
+  const categoryCount = data.categoryCount;
   // TODO: 값 확인
   const graphData = categoryCount ? Object.values(categoryCount) : [];
 
@@ -56,37 +51,34 @@ export default function Profile() {
     }
   };
 
-  const gender = getGender(userProfile?.gender);
-  const region = getRegin(userProfile?.region);
+  const gender = getGender(userProfile.gender);
+  const region = getRegin(userProfile.region);
 
-  if (!data) return null;
-
+  //   value: 'Seoul' | 'Gyeonggi' | 'etc';
   return (
     <>
       <TitleHeader title="프로필" />
       <div className="bg-white px-24px">
-        {userProfile && (
-          <div className="mb-20px flex items-center">
-            <BackgroundImageWithPlaceholder
-              src={userProfile.profileImage}
-              className="mr-24px h-[80px] w-[80px] rounded-full"
-            />
-            <div>
-              <DevelopmentPendingDialog name={userProfile.name} />
-              <div className="flex text-14px">
-                <div>{userProfile.mbti}</div>
-                {gender && <div className="mx-2 border-l"></div>}
-                {gender && <div>{gender}</div>}
+        <div className="mb-20px flex items-center">
+          <BackgroundImageWithPlaceholder
+            src={userProfile.profileImage}
+            className="mr-24px h-[80px] w-[80px] rounded-full"
+          />
+          <div>
+            <DevelopmentPendingDialog name={userProfile.name} />
+            <div className="flex text-14px">
+              <div>{userProfile.mbti}</div>
+              {gender && <div className="mx-2 border-l"></div>}
+              {gender && <div>{gender}</div>}
 
-                {userProfile.ageRange && <div className="mx-2 border-l"></div>}
-                {userProfile.ageRange && <div>{userProfile.ageRange}</div>}
+              {userProfile.ageRange && <div className="mx-2 border-l"></div>}
+              {userProfile.ageRange && <div>{userProfile.ageRange}</div>}
 
-                {region && <div className="mx-2 border-l"></div>}
-                {region && <div>{region}</div>}
-              </div>
+              {region && <div className="mx-2 border-l"></div>}
+              {region && <div>{region}</div>}
             </div>
           </div>
-        )}
+        </div>
 
         <div className="flex flex-col">
           <span className="font-medium">나의 취향 분석</span>
@@ -94,20 +86,16 @@ export default function Profile() {
             나의 취향 분석은 위시리스트를 기반으로 제공됩니다.
           </span>
           <div className="w-full">
-            {graphData && (
-              <DoughnutChart data={graphData as [number, number, number]} />
-            )}
+            <DoughnutChart data={graphData as [number, number, number]} />
           </div>
         </div>
         {/* <SectionList title="신청/예약한 활동" list={list} totalCount={12} /> */}
         {/* <div className="h-20px"></div> */}
-        {activityWishes && wishTotalCount && (
-          <SectionList
-            title="위시리스트"
-            list={activityWishes}
-            totalCount={wishTotalCount}
-          />
-        )}
+        <SectionList
+          title="위시리스트"
+          list={activityWishes}
+          totalCount={wishTotalCount}
+        />
         <Link
           href={`mailto:moharu.site@gmail.com?subject=Activity Link&body=모하루에게 전시, 행사, 모임, 장소 등 다양한 오프라인 활동을 제보해주세요!`}
           className="my-20px flex cursor-pointer justify-between rounded-[12px] border-[1px] border-[#E2E8F0] p-24px"

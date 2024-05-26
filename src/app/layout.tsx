@@ -17,9 +17,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClientProvider>
-      <html lang="en">
-        <body className={`${pretendard.variable} font-pretendard`}>
+    <html lang="en">
+      <body className={`${pretendard.variable} font-pretendard`}>
+        <ClientProvider>
           <div
             className="h-100vh w-screen bg-cover bg-center bg-no-repeat"
             style={{
@@ -32,9 +32,9 @@ export default function RootLayout({
               </div>
               <Toaster />
             </div>
-          </div>
-        </body>
-      </html>
-    </ClientProvider>
+          </div>{' '}
+        </ClientProvider>
+      </body>
+    </html>
   );
 }
