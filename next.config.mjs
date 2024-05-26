@@ -16,16 +16,6 @@ const nextConfig = {
 
     return config;
   },
-  async rewrites() {
-    return {
-      afterFiles: [
-        {
-          source: '/apis/:path*',
-          destination: `https://api.moharu.site/:path*`,
-        },
-      ],
-    };
-  },
   // TODO: 임시로 적용
   experimental: {
     missingSuspenseWithCSRBailout: false,

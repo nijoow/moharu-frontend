@@ -111,7 +111,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="fixed z-10 w-[448px] bg-white">
+      <div className="fixed z-10 w-full max-w-md bg-white">
         <div className="px-24px pb-12px pt-24px">
           <Popover open={open}>
             <PopoverTrigger asChild>
