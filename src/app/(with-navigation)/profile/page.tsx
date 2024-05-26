@@ -1,13 +1,14 @@
 import BackgroundImageWithPlaceholder from '@/app/_components/common/background-image-with-placeholder';
 import { DevelopmentPendingDialog } from '@/app/_components/dialog/development-pending-dialog';
 import TitleHeader from '@/app/_components/header/title-header';
-import { auth, signOut } from '@/auth';
+import { auth } from '@/auth';
 import { serverSideFetchWithToken } from '@/lib/fetch';
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import DoughnutChart from './_component/doughnut-chart';
 import SectionList from './_component/section-list';
+import SignOutButton from './_component/signout-button';
 
 export default async function Profile() {
   const session = await auth();
@@ -33,7 +34,7 @@ export default async function Profile() {
       <div className="bg-white px-24px">
         <div className="mb-20px flex items-center">
           <BackgroundImageWithPlaceholder
-            src={userProfile.image}
+            src={userProfile.profileImae}
             className="mr-24px h-[80px] w-[80px] rounded-full"
           />
           <div>
@@ -105,19 +106,7 @@ export default async function Profile() {
             </a>
           </p>
           <p className="mb-20px">버전 1.0.0</p>
-
-          <form
-            action={async () => {
-              'use server';
-              await signOut({
-                redirectTo: '/auth/login',
-              });
-            }}
-          >
-            <button type="submit" className="mb-24px text-slate-500">
-              로그아웃
-            </button>
-          </form>
+          <SignOutButton />
         </div>
       </div>
     </>

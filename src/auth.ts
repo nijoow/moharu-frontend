@@ -52,7 +52,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (account?.provider === 'credentials') {
         return true;
       }
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/${account?.provider}/login`,
         {
@@ -64,14 +63,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             email: user?.email,
             name: user?.name,
             profileImage: user?.image,
-            socialId: user?.id,
+            socialId: account?.providerAccountId,
             socialType: account?.provider,
           }),
         },
       );
 
       const data = await response.json();
-
       user.id = data.user.id;
       user.email = data.user.email;
       user.name = data.user.name;
@@ -84,7 +82,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       user.socialType = data.user.socialType;
       user.socialId = data.user.socialId;
       user.accessToken = data.accessToken;
-
       return true;
     },
     async jwt({ token, user }) {

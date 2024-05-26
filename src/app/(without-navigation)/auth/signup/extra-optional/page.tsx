@@ -10,8 +10,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { fetchWithToken } from '@/lib/fetch';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -107,13 +108,37 @@ export default function SignUpExtraOptionalPage() {
   }, [session]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = await fetch('https://api.moharu.site/auth/register', {
+    const options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...signUpInfo }),
-    });
-    if (response.status === 201) {
-      router.push('/?from=signup');
+    };
+    if (session) {
+      const response = await fetchWithToken(
+        'https://api.moharu.site/user/update',
+        options,
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        signIn(data.socialType, {
+          redirect: true,
+          callbackUrl: '/?from=signup',
+        });
+      }
+    } else {
+      const response = await fetch(
+        `https://api.moharu.site/auth/register`,
+        options,
+      );
+      if (response.ok) {
+        signIn('credentials', {
+          email: signUpInfo.email,
+          password: signUpInfo.password,
+          redirect: true,
+          callbackUrl: '/?from=signup',
+        });
+      }
     }
   };
 
