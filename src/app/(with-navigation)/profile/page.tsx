@@ -4,6 +4,7 @@ import TitleHeader from '@/app/_components/header/title-header';
 import { serverSideFetchWithToken } from '@/lib/fetch';
 import Image from 'next/image';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import DoughnutChart from './_component/doughnut-chart';
 import SectionList from './_component/section-list';
 import SignOutButton from './_component/signout-button';
@@ -13,6 +14,8 @@ export default async function Profile() {
     'https://api.moharu.site/user',
   );
   const data = await response.json();
+
+  if (!response.ok) return redirect('/auth/login');
 
   const userProfile = data.userProfile;
   const activityWishes = data.activityWishes;
