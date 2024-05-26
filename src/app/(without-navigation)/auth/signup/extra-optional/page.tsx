@@ -76,11 +76,19 @@ const ageRangeButtons: {
 ];
 
 const regionButtons: {
-  value: 'Seoul' | 'Gyeonggi' | 'etc';
+  value: string;
   buttonText: string;
 }[] = [
-  { value: 'Seoul', buttonText: '서울' },
-  { value: 'Gyeonggi', buttonText: '경기' },
+  { value: '강남', buttonText: '강남' },
+  { value: '서초', buttonText: '서초' },
+  { value: '중구', buttonText: '중구' },
+  { value: '송파', buttonText: '송파' },
+  { value: '영등포', buttonText: '영등포' },
+  { value: '마포', buttonText: '마포' },
+  { value: '강서', buttonText: '강서' },
+  { value: '용산', buttonText: '용산' },
+  { value: '종로', buttonText: '종로' },
+  { value: '노원구', buttonText: '노원구' },
   { value: 'etc', buttonText: '선택안함' },
 ];
 
@@ -220,7 +228,7 @@ export default function SignUpExtraOptionalPage() {
         </div>
 
         <Label className="mb-1.5 mt-10">지역 (선택)</Label>
-        <div className="flex gap-1.5 ">
+        <div className="flex w-full flex-wrap gap-1.5">
           {regionButtons.map(({ value, buttonText }) => (
             <Button
               key={`gender-${value}`}
