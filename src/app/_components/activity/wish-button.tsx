@@ -48,7 +48,6 @@ const WishButton: React.FC<WishButtonProps> = ({
           }),
         },
       );
-      console.log(response, response.status);
 
       if (response.ok) {
         setIsWish(!isWish);

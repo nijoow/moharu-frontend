@@ -26,27 +26,59 @@ export default async function Profile() {
 
   const categoryCount = data.categoryCount;
   // TODO: 값 확인
-  const graphData = Object.values(categoryCount);
+  const graphData = categoryCount ? Object.values(categoryCount) : [];
 
+  const getGender = (gender: string) => {
+    switch (gender) {
+      case 'female':
+        return '여성 ';
+      case 'male':
+        return '남성';
+      case 'ect':
+        return '선택안함';
+      default:
+        return '';
+    }
+  };
+
+  const getRegin = (region: string) => {
+    switch (region) {
+      case 'Seoul':
+        return '서울';
+      case 'Gyeonggi':
+        return '경기';
+      case 'etc':
+        return '선택안함';
+      default:
+        return '';
+    }
+  };
+
+  const gender = getGender(userProfile.gender);
+  const region = getRegin(userProfile.region);
+
+  //   value: 'Seoul' | 'Gyeonggi' | 'etc';
   return (
     <>
       <TitleHeader title="프로필" />
       <div className="bg-white px-24px">
         <div className="mb-20px flex items-center">
           <BackgroundImageWithPlaceholder
-            src={userProfile.profileImae}
+            src={userProfile.profileImage}
             className="mr-24px h-[80px] w-[80px] rounded-full"
           />
           <div>
             <DevelopmentPendingDialog name={userProfile.name} />
             <div className="flex text-14px">
               <div>{userProfile.mbti}</div>
-              <div className="mx-2 border-l"></div>
-              <div>{userProfile.gender}</div>
-              <div className="mx-2 border-l"></div>
-              <div>{userProfile.ageRange}</div>
-              <div className="mx-2 border-l"></div>
-              <div>{userProfile.region}</div>
+              {gender && <div className="mx-2 border-l"></div>}
+              {gender && <div>{gender}</div>}
+
+              {userProfile.ageRange && <div className="mx-2 border-l"></div>}
+              {userProfile.ageRange && <div>{userProfile.ageRange}</div>}
+
+              {region && <div className="mx-2 border-l"></div>}
+              {region && <div>{region}</div>}
             </div>
           </div>
         </div>

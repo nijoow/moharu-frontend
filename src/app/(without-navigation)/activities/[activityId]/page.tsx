@@ -39,14 +39,14 @@ export default function ActivityPage() {
   return (
     <>
       <Header
-        listButton
+        backButton
         shareButton
         likeButton
         transparent={true}
         isWish={activity.isWish ?? false}
         activity={activity}
       />
-      <div className="h-full">
+      <div className="mb-[48px] h-full">
         <BackgroundImageWithPlaceholder
           src={activity.coverImage}
           className="h-[460px]"
@@ -78,7 +78,11 @@ export default function ActivityPage() {
         </div>
       </div>
       {activity.link && (
-        <Button size="big" onClick={onClickMoveUrl}>
+        <Button
+          size="big"
+          onClick={onClickMoveUrl}
+          className="fixed bottom-0 mx-auto max-w-md"
+        >
           공식 홈페이지로 이동하기
         </Button>
       )}

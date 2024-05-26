@@ -145,7 +145,7 @@ export default function SignUpExtraOptionalPage() {
 
   return (
     <Form {...form}>
-      <form className="flex h-full flex-col px-10 pt-10">
+      <form className="mb-48px flex h-full flex-col px-10 pt-10">
         <span className="mb-10 font-medium">프로필 정보를 입력해주세요.</span>
 
         <Label className="mb-1.5">프로필 사진</Label>
