@@ -49,45 +49,46 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async signIn({ account, user }) {
-      console.log(account);
-      console.log(user);
       if (account?.provider === 'credentials') {
         return true;
       }
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/${account?.provider}/login`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/${account?.provider}/login`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: user?.email,
+              name: user?.name,
+              profileImage: user?.image,
+              socialId: account?.providerAccountId,
+              socialType: account?.provider,
+            }),
           },
-          body: JSON.stringify({
-            email: user?.email,
-            name: user?.name,
-            profileImage: user?.image,
-            socialId: account?.providerAccountId,
-            socialType: account?.provider,
-          }),
-        },
-      );
-      console.log(response);
+        );
+        const data = await response.json();
 
-      const data = await response.json();
+        user.id = data.user.id;
+        user.email = data.user.email;
+        user.name = data.user.name;
+        user.profileImage = data.user.profileImage;
+        user.telephone = data.user.telephone;
+        user.mbti = data.user.mbti;
+        user.ageRange = data.user.ageRange;
+        user.gender = data.user.gender;
+        user.region = data.user.region;
+        user.socialType = data.user.socialType;
+        user.socialId = data.user.socialId;
+        user.accessToken = data.accessToken;
 
-      user.id = data.user.id;
-      user.email = data.user.email;
-      user.name = data.user.name;
-      user.profileImage = data.user.profileImage;
-      user.telephone = data.user.telephone;
-      user.mbti = data.user.mbti;
-      user.ageRange = data.user.ageRange;
-      user.gender = data.user.gender;
-      user.region = data.user.region;
-      user.socialType = data.user.socialType;
-      user.socialId = data.user.socialId;
-      user.accessToken = data.accessToken;
-      console.log(user);
-      return true;
+        return true;
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
     },
     async jwt({ token, user }) {
       if (token && user) {
