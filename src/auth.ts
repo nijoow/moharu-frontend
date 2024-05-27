@@ -48,40 +48,50 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: 'jwt',
   },
   callbacks: {
-    async jwt({ token, user, account }) {
-      if (token && user && account) {
-        if (['google', 'kakao'].includes(account.provider)) {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/${account?.provider}/login`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                email: user.email,
-                name: user.name,
-                profileImage: user.image,
-                socialId: account.providerAccountId,
-                socialType: account.provider,
-              }),
+    async signIn({ account, user }) {
+      if (account?.provider === 'credentials') {
+        return true;
+      }
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/${account?.provider}/login`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
             },
-          );
-          const data = await response.json();
+            body: JSON.stringify({
+              email: user?.email,
+              name: user?.name,
+              profileImage: user?.image,
+              socialId: account?.providerAccountId,
+              socialType: account?.provider,
+            }),
+          },
+        );
+        const data = await response.json();
 
-          user.id = data.user.id;
-          user.email = data.user.email;
-          user.name = data.user.name;
-          user.profileImage = data.user.profileImage;
-          user.telephone = data.user.telephone;
-          user.mbti = data.user.mbti;
-          user.ageRange = data.user.ageRange;
-          user.gender = data.user.gender;
-          user.region = data.user.region;
-          user.socialType = data.user.socialType;
-          user.socialId = data.user.socialId;
-          user.accessToken = data.accessToken;
-        }
+        user.id = data.user.id;
+        user.email = data.user.email;
+        user.name = data.user.name;
+        user.profileImage = data.user.profileImage;
+        user.telephone = data.user.telephone;
+        user.mbti = data.user.mbti;
+        user.ageRange = data.user.ageRange;
+        user.gender = data.user.gender;
+        user.region = data.user.region;
+        user.socialType = data.user.socialType;
+        user.socialId = data.user.socialId;
+        user.accessToken = data.accessToken;
+
+        return true;
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+    },
+    async jwt({ token, user }) {
+      if (token && user) {
         token.accessToken = user.accessToken;
         token.user = user;
       }
