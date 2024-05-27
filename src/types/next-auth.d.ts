@@ -14,6 +14,7 @@ declare module 'next-auth' {
     socialType: string;
     socialId: string;
     accessToken: string;
+    socialAccessToken: string | undefined;
   }
   interface Session {
     user: DefaultSession['user'] & User;
