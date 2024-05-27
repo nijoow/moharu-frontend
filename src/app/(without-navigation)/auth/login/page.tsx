@@ -1,11 +1,15 @@
 import { auth, signIn } from '@/auth';
 import { Button } from '@/components/ui/button';
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import ErrorMessage from './_compontents/error-message';
 
-export default async function LoginPage() {
+export default async function LoginPage({
+  searchParams: { error },
+}: {
+  searchParams: { error: string };
+}) {
   const session = await auth();
   if (session) redirect('/');
 
@@ -22,6 +26,7 @@ export default async function LoginPage() {
         모두에게 선물하는 하루, <span className="text-pink-500">모하루</span>
       </span>
       <div className="mb-5 flex w-full flex-col gap-2.5">
+        {error && <ErrorMessage error={error} />}
         <Link href="/auth/login/email">
           <Button className="relative h-10 w-full rounded-full bg-white text-black hover:bg-slate-300">
             <Image

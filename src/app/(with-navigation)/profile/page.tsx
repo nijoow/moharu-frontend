@@ -17,7 +17,6 @@ export default function Profile() {
     fetchWithToken('https://api.moharu.site/user')
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         setData(data);
       });
   }, []);

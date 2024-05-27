@@ -49,24 +49,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async signIn({ account, user, profile }) {
-      if (account) {
-        if (account?.provider === 'credentials') {
+      if (account && user) {
+        if (account.provider === 'credentials') {
           return true;
         }
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/${account?.provider}/login`,
+            `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/${account.provider}/login`,
             {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                email: user?.email,
-                name: user?.name,
-                profileImage: user?.image,
-                socialId: account?.providerAccountId,
-                socialType: account?.provider,
+                email: user.email,
+                name: user.name,
+                profileImage: user.image,
+                socialId: account.providerAccountId,
+                socialType: account.provider,
               }),
             },
           );
@@ -88,21 +88,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           return true;
         } catch (e) {
-          console.log(e);
-          return false;
+          return `/auth/login?error=${(e as Error).message ?? ''}`;
         }
       }
-      return false;
+      return '/auth/login';
     },
     async jwt({ token, user }) {
       if (token && user) {
         token.user = user;
+        token.accessToken = user.socialAccessToken;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.accessToken = token.socialAccessToken as string;
+        session.accessToken = token.accessToken as string;
         session.user = token.user;
       }
       return session;
