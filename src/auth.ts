@@ -48,7 +48,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: 'jwt',
   },
   callbacks: {
-    async signIn({ account, user, profile }) {
+    async signIn({ account, user }) {
       if (account && user) {
         if (account.provider === 'credentials') {
           return true;
@@ -70,7 +70,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               }),
             },
           );
+
           const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.message || 'Login failed');
+          }
 
           user.id = data.user.id;
           user.email = data.user.email;
@@ -88,7 +93,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           return true;
         } catch (e) {
-          return `/auth/login?error=${(e as Error).message ?? ''}`;
+          return `/auth/login?error=${encodeURIComponent((e as Error).message || '')}`;
         }
       }
       return '/auth/login';
