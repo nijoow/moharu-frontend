@@ -2,7 +2,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { pretendard } from '@/font/font';
 import type { Metadata } from 'next';
 import React from 'react';
-import ClientProvider from './_context/ClientProvider';
+import ClientProvider from './_context/client-provider';
 import './globals.css';
 
 export const metadata: Metadata = {

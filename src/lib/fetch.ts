@@ -40,7 +40,7 @@ export async function serverSideFetchWithToken(
     Authorization: `Bearer ${session?.user.accessToken}`,
   };
 
-  return fetch(url, {
+  return fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}${url}`, {
     ...options,
     headers,
   });

@@ -1,54 +1,35 @@
-'use client';
-
 import TitleHeader from '@/app/_components/header/title-header';
-import { fetchWithToken } from '@/lib/fetch';
+import { serverSideFetchWithToken } from '@/lib/fetch';
 import { Activity } from '@/types/type';
-import { useEffect, useState } from 'react';
 import WishListCard from './_component/wish-list-card';
 import WishListTabs from './_component/wish-list-tabs';
 
-export default function WishListPage() {
-  const [wishList, setWishList] = useState<Activity[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
+export default async function WishListPage({
+  searchParams: { category = '' },
+}: {
+  searchParams: { category: string };
+}) {
+  const response = await serverSideFetchWithToken(
+    `/activities/wish/list?type=${category}`,
+  );
+  const data = await response.json();
 
-  const handleTabChange = (value: string) => {
-    fetchData(value);
-  };
-
-  const fetchData = (value: string) => {
-    fetchWithToken(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/activities/wish/list?type=${value}`,
-    )
-      .then(res => res.json())
-      .then(data => {
-        setWishList(data.activities);
-
-        // totalCount 를 전체 일때만 변경
-        if (value === '') {
-          setTotalCount(data.totalCount);
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    fetchData('');
-  }, []);
+  const wishList: Activity[] = data.activities;
 
   return (
     <>
       <TitleHeader title="위시리스트" />
-      <div className="bg-white px-24px">
-        <WishListTabs totalCount={totalCount} onTabChange={handleTabChange} />
-        <div className="mt-12px grid h-full w-full grid-cols-2 gap-20px">
+      <div className="mb-6 flex h-fit flex-auto flex-col px-24px">
+        <WishListTabs category={category} />
+        <div className="mt-12px grid h-auto w-full flex-auto grid-cols-2 gap-20px">
           {wishList.length > 0 ? (
             wishList.map(wishList => (
               <WishListCard key={wishList.id} wishList={wishList} />
             ))
           ) : (
-            <div className="flex items-center">위시리스트가 없습니다.</div>
+            <div className="col-span-2 flex h-full w-full items-center justify-center text-slate-500">
+              위시리스트가 존재하지 않습니다.
+            </div>
           )}
         </div>
       </div>

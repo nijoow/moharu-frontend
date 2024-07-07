@@ -24,7 +24,7 @@ const MainActivityCard: React.FC<MainActivityCardProps> = ({ activity }) => {
 
   return (
     <>
-      <div className="bg-white p-24px">
+      <div className="mb-auto bg-white p-24px">
         <Link href={`/activities/${activity.id}`}>
           <div className="relative mb-20px">
             <BackgroundImageWithPlaceholder

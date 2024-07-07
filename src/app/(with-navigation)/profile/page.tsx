@@ -1,32 +1,28 @@
-'use client';
 import BackgroundImageWithPlaceholder from '@/app/_components/common/background-image-with-placeholder';
 import { DevelopmentPendingDialog } from '@/app/_components/dialog/development-pending-dialog';
 import TitleHeader from '@/app/_components/header/title-header';
-import { fetchWithToken } from '@/lib/fetch';
+import { auth } from '@/auth';
+import { serverSideFetchWithToken } from '@/lib/fetch';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { redirect } from 'next/navigation';
 import DoughnutChart from './_component/doughnut-chart';
 import SectionList from './_component/section-list';
 import SignOutButton from './_component/signout-button';
 
-export default function Profile() {
-  const [data, setData] = useState<any>(null);
+export default async function Profile() {
+  const session = await auth();
 
-  useEffect(() => {
-    fetchWithToken('https://api.moharu.site/user')
-      .then(res => res.json())
-      .then(data => {
-        setData(data);
-      });
-  }, []);
+  const response = await serverSideFetchWithToken('/user');
+  const data = await response.json();
 
-  const userProfile = data?.userProfile;
-  const activityWishes = data?.activityWishes;
-  const wishTotalCount = data?.wishTotalCount;
+  if (!session || !data) return redirect('/auth/login');
 
-  const categoryCount = data?.categoryCount;
-  // TODO: 값 확인
+  const userProfile = data.userProfile;
+  const activityWishes = data.activityWishes;
+  const wishTotalCount = data.wishTotalCount;
+  const categoryCount = data.categoryCount;
+
   const graphData = categoryCount ? Object.values(categoryCount) : [];
 
   const getGender = (gender: string) => {
@@ -42,50 +38,32 @@ export default function Profile() {
     }
   };
 
-  const getRegin = (region: string) => {
-    switch (region) {
-      case 'Seoul':
-        return '서울';
-      case 'Gyeonggi':
-        return '경기';
-      case 'etc':
-        return '선택안함';
-      default:
-        return '';
-    }
-  };
-
-  const gender = getGender(userProfile?.gender);
-  const region = getRegin(userProfile?.region);
-
-  if (!data) return null;
+  const gender = getGender(userProfile.gender);
 
   return (
     <>
       <TitleHeader title="프로필" />
       <div className="bg-white px-24px">
-        {userProfile && (
-          <div className="mb-20px flex items-center">
-            <BackgroundImageWithPlaceholder
-              src={userProfile.profileImage}
-              className="mr-24px h-[80px] w-[80px] rounded-full"
-            />
-            <div>
-              <DevelopmentPendingDialog name={userProfile.name} />
-              <div className="flex text-14px">
-                <div>{userProfile.mbti}</div>
-                {gender && <div className="mx-2 border-l"></div>}
-                {gender && <div>{gender}</div>}
+        <div className="mb-20px flex items-center">
+          <BackgroundImageWithPlaceholder
+            src={userProfile.profileImage}
+            className="mr-24px h-[80px] w-[80px] rounded-full"
+          />
+          <div>
+            <DevelopmentPendingDialog name={userProfile.name} />
+            <div className="flex text-14px">
+              <div>{userProfile.mbti}</div>
+              <div className="mx-2 border-l"></div>
+              <div>{gender}</div>
 
-                {userProfile.ageRange && <div className="mx-2 border-l"></div>}
-                {userProfile.ageRange && <div>{userProfile.ageRange}</div>}
+              <div className="mx-2 border-l"></div>
+              <div>{userProfile.ageRange}</div>
 
-                {region && <div className="mx-2 border-l"></div>}
-                {region && <div>{region}</div>}
-              </div>
+              <div className="mx-2 border-l"></div>
+              <div>{userProfile.region}</div>
             </div>
           </div>
-        )}
+        </div>
 
         <div className="flex flex-col">
           <span className="font-medium">나의 취향 분석</span>
@@ -93,9 +71,7 @@ export default function Profile() {
             나의 취향 분석은 위시리스트를 기반으로 제공됩니다.
           </span>
           <div className="w-full">
-            {graphData && (
-              <DoughnutChart data={graphData as [number, number, number]} />
-            )}
+            <DoughnutChart data={graphData as [number, number, number]} />
           </div>
         </div>
         {/* <SectionList title="신청/예약한 활동" list={list} totalCount={12} /> */}
@@ -126,7 +102,6 @@ export default function Profile() {
             height={110}
           />
         </Link>
-
         <div className="text-14px">
           <p className="mb-20px">
             <a

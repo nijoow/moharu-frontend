@@ -1,51 +1,50 @@
-'use client';
-import { useState } from 'react';
+import { serverSideFetchWithToken } from '@/lib/fetch';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 interface WishiListTabsProps {
-  totalCount: number;
-  onTabChange: (value: string) => void; // 새로운 props 추가
+  category: string;
 }
 
-const WishListTabs: React.FC<WishiListTabsProps> = ({
-  totalCount,
-  onTabChange,
-}) => {
-  const [selectedTabValue, setSelectedTabValue] = useState('');
+const tabs = [
+  {
+    title: '전체',
+    value: '',
+  },
+  {
+    title: '전시',
+    value: 'event',
+  },
+  {
+    title: '모임',
+    value: 'meeting',
+  },
+  {
+    title: '장소',
+    value: 'place',
+  },
+];
 
-  const handleTabChange = (value: string) => {
-    setSelectedTabValue(value);
-    onTabChange(value); // 탭이 변경될 때마다 콜백 호출
-  };
+const WishListTabs: React.FC<WishiListTabsProps> = async ({ category }) => {
+  const response = await serverSideFetchWithToken(`/activities/wish/list`);
+  const data = await response.json();
+  const totalCount = data.totalCount;
 
-  const tabs = [
-    {
-      title: '전체',
-      value: '',
-    },
-    {
-      title: '전시',
-      value: 'event',
-    },
-    {
-      title: '모임',
-      value: 'meeting',
-    },
-    {
-      title: '장소',
-      value: 'place',
-    },
-  ];
   return (
     <div className="flex justify-between">
       {tabs.map(tab => (
-        <div key={tab.title} className="flex  items-center justify-center">
-          <button
-            onClick={() => handleTabChange(tab.value)} // 수정된 부분
-            className={`h-[40px] w-[80px] border-b-[2px] pb-8px font-medium ${tab.value === selectedTabValue ? 'border-slate-900 text-black' : 'border-transparent text-slate-500'}`}
-          >
-            {tab.title} {tab.value === '' ? <span>({totalCount})</span> : null}
-          </button>
-        </div>
+        <Link
+          key={tab.title}
+          href={`/wish-list?category=${tab.value}`}
+          className={cn(
+            `flex h-[40px] w-[80px] items-center  justify-center border-b-[2px] border-transparent pb-8px font-medium text-slate-500`,
+            {
+              'border-slate-900 text-black': tab.value === category,
+            },
+          )}
+        >
+          {tab.title} {tab.value === '' ? <span>({totalCount})</span> : null}
+        </Link>
       ))}
     </div>
   );

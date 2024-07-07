@@ -1,32 +1,38 @@
+import { HomeSearchParams } from '@/app/(with-navigation)/page';
+import { cn, createQueryString } from '@/lib/utils';
 import { Category } from '@/types/type';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface CategoryBarProps {
   categoryList: Category[];
-  selectedCategoryId: string;
-  onCategorySelect: (id: string) => void;
+  searchParams: HomeSearchParams;
 }
 
 const CategoryBar: React.FC<CategoryBarProps> = ({
   categoryList,
-  selectedCategoryId,
-  onCategorySelect,
+  searchParams,
 }) => {
-  const onClickCategoryBtn = (id: number | string) => () => {
-    onCategorySelect(id.toString());
-  };
+  const categoryId = searchParams?.categoryId;
 
   return (
-    // TODO: 스크롤 처리
     <div className="scroll-x flex justify-between border-b border-slate-200 px-24px">
       {categoryList.length > 0
         ? categoryList.map(category => (
-            <div
-              onClick={onClickCategoryBtn(category.id)}
+            <Link
+              href={`/?${createQueryString({
+                key: 'categoryId',
+                value: category.id.toString(),
+                prevSearchParams: new URLSearchParams(searchParams),
+              })}`}
               key={category.id}
-              className={`flex h-[76px] w-[70px] cursor-pointer flex-col items-center justify-center border-b ${category.id.toString() === selectedCategoryId ? ' border-slate-900' : 'border-white'}`}
+              className={cn(
+                `flex h-[76px] w-[70px] cursor-pointer flex-col items-center justify-center border-b border-white`,
+                {
+                  'border-slate-900': category.id.toString() === categoryId,
+                },
+              )}
             >
-              {/* TODO: 이미지처리 */}
               <Image
                 src={`/images/icons/${category.icon}.svg`}
                 alt={category.name}
@@ -34,7 +40,7 @@ const CategoryBar: React.FC<CategoryBarProps> = ({
                 height={20}
               />
               <p className="my-12px"> {category.name}</p>
-            </div>
+            </Link>
           ))
         : null}
     </div>

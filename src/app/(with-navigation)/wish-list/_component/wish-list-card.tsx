@@ -9,10 +9,11 @@ interface WishListCardProps {
 const WishListCard: React.FC<WishListCardProps> = ({ wishList }) => {
   const activitySchedule = getActivitySchedule(wishList);
   const activityType = getActivityInfoByType(wishList.type).type;
+
   return (
     <Link
       href={`/activities/${wishList.id}`}
-      className="col-span-1 flex h-[320px] w-full flex-col"
+      className="col-span-1 flex h-fit w-full flex-col"
     >
       <div className="relative">
         <div

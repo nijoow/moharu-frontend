@@ -55,3 +55,18 @@ export const getActivitySchedule = (activity: Activity) => {
       return '';
   }
 };
+
+export const createQueryString = ({
+  key,
+  value,
+  prevSearchParams,
+}: {
+  key: string;
+  value: string;
+  prevSearchParams: URLSearchParams;
+}) => {
+  const params = new URLSearchParams(prevSearchParams.toString());
+  params.set(key, value);
+
+  return params.toString();
+};
